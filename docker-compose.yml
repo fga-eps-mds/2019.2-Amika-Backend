@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  db:
+    container_name: db
+    restart: always
+    image: postgres
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+  backend:
+    container_name: backend
+    restart: always
+    build: .
+    command: /bin/bash -l -c '
+      python3 manage.py makemigrations &&
+      python3 manage.py migrate --noinput &&
+      python3 manage.py runserver 0.0.0.0:8000'
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
