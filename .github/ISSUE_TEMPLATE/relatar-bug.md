@@ -11,11 +11,11 @@ assignees: ''
 <!-- Descreva de forma clara e concisa sobre o bug. -->
 
 **Para reproduzir**  
-Passos para reproduzir o bug:
+<!-- Passos para reproduzir o bug:
 1. Vá para '...'
 2. Clique em '....'
 3. Arraste para '....'
-4. Veja o erro
+4. Veja o erro-->
 
 **Comportamento esperado**  
 <!-- Descreva de forma clara e concisa do comportamento esperado do sistema. -->
