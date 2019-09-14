@@ -15,5 +15,5 @@ class User(models.Model):
 		self.save()
 
 class Registration(models.Model):
-	matricula = models.CharField( max_length=9, blank=False, null=False)
-	turma = models.CharField(max_length=1, blank=False, null=False)
+	matricula = models.CharField( max_length=9)
+	turma = models.CharField(max_length=1)
