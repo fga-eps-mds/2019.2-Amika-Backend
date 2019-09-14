@@ -7,9 +7,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
         def create(self, validated_data):
-            matricula = Registration(
-                matricula=validated_data['matricula'],
-                turma=validated_data['turma'],
+            registration = Registration(
+                registration_field=validated_data['matricula'],
+                class_field=validated_data['turma'],
             )
-            matricula.save()
-            return matricula
+            registration.save()
+            return registration

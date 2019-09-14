@@ -20,16 +20,14 @@ def tela_de_cadastro(request):
         form = SubForm()
     return render(request, 'cadastrar_usuario/tela_de_cadastro.html', {'form': form})"""
     pass
-class RegistrationViewSet(generics.ListCreateAPIView):
+class MultipleRegistrationsViewSet(generics.ListCreateAPIView):
+    queryset = Registration.objects.all()
     serializer_class = RegistrationSerializer
 
     def create(self, request, *args, **kwargs):
         data = request.data.get("items") if 'items' in request.data else request.data
-        print(request.data[0])
-        many = isinstance(data, list)
-        print (data, many)
-        serializer = self.get_serializer(data=data, many=many)
+        many_data = isinstance(data, list)
+        serializer = self.get_serializer(data=data, many=many_data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        #headers = self.get_success_headers(serializer.data)
         return Response({request.data})
