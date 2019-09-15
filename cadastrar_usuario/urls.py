@@ -1,6 +1,6 @@
-form django.urls import path
-form .import views
+from django.urls import path
+from . import views
 
-urlpattern = [
-    path('', views.tela_de_cadastro, name = 'tela_de_cadastro')
+urlpatterns = [
+    path('', views.cadastrar_aluno, name = 'cadastrar_aluno')
 ]

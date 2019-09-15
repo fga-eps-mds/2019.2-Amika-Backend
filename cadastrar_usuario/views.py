@@ -1,17 +1,17 @@
 from django.shortcuts import render
-from .models import User
+from rest_framework import generics
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from .models import UsuarioAluno
 
-def tela_de_cadastro(request):
-    if request.method == "POST":
-        form = SubForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit = False)
-            user.save()
-            return redirect('tela_de_cadastro')
-
-    else:
-        form = SubForm()
-    return render(request, 'cadastrar_usuario/tela_de_cadastro.html', {'form': form})
+@api_view(['POST'])
+def cadastrar_aluno(request):
+	serializer = UsuarioAlunoSerializer(data = request.data)
+	if serializer.isvalid():
+		pessoa = UsuarioAlunoSerializer.create(serializer, request.data)
+		return Response({"Aluno cadastrado com sucesso!"})
+	else:
+		return Response({"Dados incorretos! Tente novamente"})
 
 
 
