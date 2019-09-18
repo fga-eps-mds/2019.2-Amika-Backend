@@ -28,3 +28,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
             )
             registration.save()
             return registration
+
+class EditarAlunoSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = UsuarioAluno
+		fields = "__all__"
