@@ -1,25 +1,23 @@
 from django.shortcuts import render
-from cadastrar_usuario.models import User
-from django.shortcuts import redirect
+from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import RegistrationSerializer
-from .models import Registration
-from rest_framework import generics
+from .models import UsuarioAluno, Registration
+from cadastrar_usuario.serializers import UsuarioAlunoSerializer, RegistrationSerializer
 
-#Criar o form SubForm
-def tela_de_cadastro(request):
-    """if request.method == "POST":
-        form = SubForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit = False)
-            user.save()
-            return redirect('tela_de_cadastro')
+@api_view(['POST'])
+def cadastrar_aluno(request):
+	serializer = UsuarioAlunoSerializer(data = request.data)
+	if serializer.isvalid():
+		registro = Registration.objects.filter(matricula=serializer.matricula_aluno).first()
+		if (registro):
+			aluno = UsuarioAlunoSerializer.create(serializer, request.data)
+			return Response ({"Usuario cadastrado com sucesso!"})
+		else:
+			return Response ({"Não foi possível encontrar um aluno com esta matricula na disciplina, tente novamente!"})
+	else:
+		return Response({"Dados incorretos! Tente novamente"})
 
-    else:
-        form = SubForm()
-    return render(request, 'cadastrar_usuario/tela_de_cadastro.html', {'form': form})"""
-    pass
 class MultipleRegistrationsViewSet(generics.ListCreateAPIView):
     queryset = Registration.objects.all()
     serializer_class = RegistrationSerializer
@@ -27,7 +25,7 @@ class MultipleRegistrationsViewSet(generics.ListCreateAPIView):
     def create(self, request, *args, **kwargs):
         data = request.data.get("items") if 'items' in request.data else request.data
         many_data = isinstance(data, list)
-        serializer = self.get_serializer(data=data, many=many_data)
+        serializer = RegistrationSerializer(data=data, many=many_data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         return Response({request.data})
