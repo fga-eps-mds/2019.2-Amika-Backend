@@ -6,9 +6,18 @@ from .serializers import UsuarioAlunoSerializer, RegistrationSerializer, EditarA
 from .models import UsuarioAluno
 
 class UsuarioProfessorAdmin(admin.ModelAdmin):
+    fields = (
+        'matricula_aluno',
+    )
+    
     add_serializer = UsuarioAlunoSerializer
     serializer = EditarAlunoSerializer
     model = UsuarioAluno
-    list_display = ['matricula_aluno', 'nome_aluno', 'senha_aluno', 'email_aluno']
+
+    list_display = (
+        'matricula_aluno',
+        'nome_aluno',
+        'email_aluno',
+    )
 
 admin.site.register(UsuarioAluno, UsuarioProfessorAdmin)
