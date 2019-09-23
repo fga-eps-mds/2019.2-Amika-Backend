@@ -1,4 +1,4 @@
-version: '3'
+version: '3.5'
 
 services:
   db:
@@ -11,17 +11,28 @@ services:
       - POSTGRES_PASSWORD=password
     ports:
       - "5433:5432"
+    networks:
+      - amika-net
+  
   backend:
     container_name: backend
     restart: always
+    image: backend:latest
     build: .
     command: /bin/bash -l -c '
       python3 manage.py makemigrations &&
       python3 manage.py migrate --noinput &&
-      python3 manage.py runserver 0.0.0.0:8000'
+      python3 manage.py runserver 0:8000'
     volumes:
-      - .:/code
+      - .:/amika-backend
     ports:
       - "8000:8000"
     depends_on:
       - db
+    networks:
+      - amika-net
+
+networks: 
+  amika-net:
+    name: amika-net
+    driver: bridge
