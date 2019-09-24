@@ -7,9 +7,9 @@ before_install:
   - sudo /etc/init.d/postgresql stop
 
 before_script:
-  - docker-compose -f "docker-compose.yml" up -d --build
+  - docker-compose up -d --build
   - >
-    while ! docker logs backend | grep "Starting development server at http://0.0.0.0:8000/"; do
+    while ! docker logs backend | grep "Starting development server at http://0:8000/"; do
         sleep 5
     done;
 
@@ -17,4 +17,4 @@ script:
   - docker exec -it backend python3 manage.py test
 
 after_script:
-  - docker-compose -f "docker-compose.yml" down --remove-orphans
+  - docker-compose down --remove-orphans
