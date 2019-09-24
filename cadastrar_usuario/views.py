@@ -8,8 +8,8 @@ from .serializers import UsuarioAlunoSerializer, RegistrationSerializer
 @api_view(['POST'])
 def cadastrar_aluno(request):
 	serializer = UsuarioAlunoSerializer(data = request.data)
-	if serializer.isvalid():
-		registro = Registrarion.objects.filter(matricula=serializer.matricula_aluno).first()
+	if serializer.is_valid():
+		registro = Registrarion.objects.filter(matricula=serializer.data["matricula_aluno"]).first()
 		if (registro):
 			aluno = UsuarioAlunoSerializer.create(serializer, request.data)
 			return Response ({"Usuario cadastrado com sucesso!"})
@@ -28,6 +28,6 @@ class MultipleRegistrationsViewSet(generics.ListCreateAPIView):
         serializer = self.get_serializer(data=data, many=many_data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        return Response({request.data})
+        return Response({request})
 
 
