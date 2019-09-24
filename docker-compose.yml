@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.5'
 
 services:
   db:
@@ -19,10 +19,7 @@ services:
     restart: always
     image: backend:latest
     build: .
-    command: /bin/bash -l -c '
-      python3 manage.py makemigrations &&
-      python3 manage.py migrate --noinput &&
-      python3 manage.py runserver 0:8000'
+    command: python3 manage.py runserver 0:8000
     volumes:
       - .:/amika-backend
     ports:
@@ -34,4 +31,5 @@ services:
 
 networks: 
   amika-net:
+    name: amika-net
     driver: bridge
