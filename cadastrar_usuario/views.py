@@ -9,7 +9,7 @@ from .serializers import UsuarioAlunoSerializer, RegistrationSerializer
 def cadastrar_aluno(request):
 	serializer = UsuarioAlunoSerializer(data = request.data)
 	if serializer.is_valid():
-		registro = Registrarion.objects.filter(matricula=serializer.data["matricula_aluno"]).first()
+		registro = Registration.objects.filter(matricula=serializer.data["matricula_aluno"]).first()
 		if (registro):
 			aluno = UsuarioAlunoSerializer.create(serializer, request.data)
 			return Response ({"Usuario cadastrado com sucesso!"})
