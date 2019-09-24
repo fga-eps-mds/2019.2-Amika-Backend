@@ -3,18 +3,6 @@ sudo: required
 services:
   - docker
 
-before_install:
-  - sudo /etc/init.d/postgresql stop
-
-before_script:
-  - docker-compose up -d --build
-  - >
-    while ! docker logs backend | grep "Starting development server at http://0:8000/"; do
-        sleep 5
-    done;
-
 script:
-  - docker exec -it backend python3 manage.py test
-
-after_script:
-  - docker-compose down --remove-orphans
+  - docker build -t backend .
+  - docker run --rm -p 8000:8000 -v $TRAVIS_BUILD_DIR:/amika-backend backend python3 manage.py test
