@@ -34,5 +34,4 @@ services:
 
 networks: 
   amika-net:
-    name: amika-net
     driver: bridge
