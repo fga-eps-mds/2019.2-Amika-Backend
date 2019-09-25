@@ -26,10 +26,10 @@ if os.path.isfile(dotenv_file):
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '=j2dii975g9aynx!lt*n2ek86!*!f_0y=fzi5xca8jp&x412b-'
+SECRET_KEY = os.environ.get('SECRET_KEY', '')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', False)
 
 ALLOWED_HOSTS = ['*']
 
@@ -107,9 +107,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'pt-BR'
+LANGUAGE_CODE = os.environ.get('LANGUAGE_CODE', 'pt-BR')
 
-TIME_ZONE = 'America/Sao_Paulo'
+TIME_ZONE = os.environ.get('TIME_ZONE', 'America/Sao_Paulo')
 
 USE_I18N = True
 
