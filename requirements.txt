@@ -1,7 +1,6 @@
 # Django
 Django==2.2.5
 psycopg2==2.8.3
-python-dotenv==0.10.3
 
 # Django REST framework
 djangorestframework==3.10.3
