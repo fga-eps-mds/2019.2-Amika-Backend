@@ -22,7 +22,6 @@ services:
       - "8000:8000"
     environment:
       - DATABASE_URL=postgresql://postgres:password@db:5432/postgres
-      - SECRET_KEY='w7)*nsr=m!-%7dek0**esjr_n=haf3-h(4=&uxc48@3(kdpgu('
       - DEBUG=True
     depends_on:
       - db
