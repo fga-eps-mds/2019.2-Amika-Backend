@@ -1,6 +1,15 @@
 version: '3.5'
 
 services:
+  db:
+    container_name: db
+    restart: always
+    image: postgres
+    ports:
+      - "5433:5432"
+    networks:
+      - amika-net
+
   backend:
     container_name: backend
     restart: always
@@ -11,6 +20,12 @@ services:
       - .:/amika-backend
     ports:
       - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@db:5432/postgres
+      - SECRET_KEY='w7)*nsr=m!-%7dek0**esjr_n=haf3-h(4=&uxc48@3(kdpgu('
+      - DEBUG=True
+    depends_on:
+      - db
     networks:
       - amika-net
 
