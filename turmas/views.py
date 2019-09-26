@@ -29,3 +29,12 @@ def deletar_turma(request,pk):
 	Turma.delete()
 	return JsonResponse({'turma deletada'})
 	#return Response({"Turma deletada yay :3"})
+
+@api_view(['GET', 'POST'])
+def editar_turma(request, pk): 
+	Turma = get_turma(pk)
+	serializer_class = TurmaSerializer(Turma, partial = True, data = request.data)
+	if serializer_class.is_valid(raise_exception = True):
+		serializer_class.save()
+		return Response(serializer_class.data)
+	return Response ({"Turma editada"})
