@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Turma
 from .serializers import TurmaSerializer
+from django.http import JsonResponse
 
 @api_view(['GET'])
 def listar_turmas(request):
@@ -19,3 +20,12 @@ def criar_turmas(request):
 		return Response ({'Turma Criada!'})
 	else:
 		return Response ({'Deu errado bro'})
+
+def get_turma(pk):
+	return Turma.objects.get(pk = pk)
+
+def deletar_turma(request,pk):
+	Turma = get_turma(pk)
+	Turma.delete()
+	return JsonResponse({'turma deletada'})
+	#return Response({"Turma deletada yay :3"})
