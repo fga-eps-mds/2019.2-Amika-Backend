@@ -4,10 +4,14 @@ psycopg2==2.8.3
 
 # Django REST framework
 djangorestframework==3.10.3
+djangorestframework-jwt==1.11.0
 Markdown==3.1.1         # Markdown support for the browsable API.
 django-filter==2.2.0    # Filtering support
+<<<<<<< 62e09a0d0c32a1d086f84a854aebf2d310a6d5d9
 
 # Heroku
 gunicorn==19.9.0
 django-heroku==0.3.1
 whitenoise==4.1.4
+=======
+>>>>>>> Atualização dos arquivos setings.py, urls.py e requirements.txt para adequação do projeto ao app login
