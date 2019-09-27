@@ -4,6 +4,7 @@ psycopg2==2.8.3
 
 # Django REST framework
 djangorestframework==3.10.3
+djangorestframework-jwt==1.11.0
 Markdown==3.1.1         # Markdown support for the browsable API.
 django-filter==2.2.0    # Filtering support
 
