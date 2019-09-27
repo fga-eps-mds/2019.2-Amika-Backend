@@ -29,8 +29,7 @@ def get_turma(pk):
 def deletar_turma(request,pk):
 	Turma = get_turma(pk)
 	Turma.delete()
-	return JsonResponse({'turma deletada'})
-	#return Response({"Turma deletada yay :3"})
+	return Response({'turma deletada'})
 
 @api_view(['PUT'])
 def editar_turma(request, pk): 
