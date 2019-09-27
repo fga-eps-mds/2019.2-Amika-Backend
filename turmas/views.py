@@ -6,6 +6,7 @@ from .models import Turma
 from .serializers import TurmaSerializer
 from django.http import JsonResponse
 
+
 @api_view(['GET'])
 def listar_turmas(request):
     queryset = Turma.objects.all()
@@ -24,13 +25,14 @@ def criar_turmas(request):
 def get_turma(pk):
 	return Turma.objects.get(pk = pk)
 
+@api_view(['DELETE'])
 def deletar_turma(request,pk):
 	Turma = get_turma(pk)
 	Turma.delete()
 	return JsonResponse({'turma deletada'})
 	#return Response({"Turma deletada yay :3"})
 
-@api_view(['GET', 'POST'])
+@api_view(['PUT'])
 def editar_turma(request, pk): 
 	Turma = get_turma(pk)
 	serializer_class = TurmaSerializer(Turma, partial = True, data = request.data)
