@@ -4,6 +4,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import UsuarioAluno, Registration
 from .serializers import UsuarioAlunoSerializer, RegistrationSerializer
+from rest_framework import status
 
 @api_view(['POST'])
 def cadastrar_aluno(request):
@@ -28,6 +29,4 @@ class MultipleRegistrationsViewSet(generics.ListCreateAPIView):
         serializer = self.get_serializer(data=data, many=many_data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        return Response({request})
-
-
+        return Response(serializer.data, status=status.HTTP_200_OK)
