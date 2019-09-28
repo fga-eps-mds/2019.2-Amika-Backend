@@ -6,4 +6,5 @@ urlpatterns = [
     path('turmas_create', views.criar_turmas),
     path('turma_delete/<int:pk>', views.deletar_turma),
     path('turma_edit/<int:pk>', views.editar_turma),
+    path('turma/<int:pk>', views.get_turma),
 ]
