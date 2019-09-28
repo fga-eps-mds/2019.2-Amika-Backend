@@ -12,12 +12,6 @@ class AlunoSerializerCasosDeTestes(TestCase):
             senha='918273645',
             email='shiryuamigo@unb.br')
 
-class SerializerRegistroSerializerCasoDeTeste(TestCase):
-    def test_serializer_RegistroSerializer_valido(self):
-        aluno = Registro.objects.create(matricula='170015311', turma='A')
-        data = {'matricula': aluno.matricula, 'turma': aluno.turma}
-        serializer = RegistroSerializer(data=data)
-        self.assertFalse(serializer.is_valid())
         aluno_dados = {
             'nome': aluno.nome,
             'matricula': aluno.matricula,
@@ -46,7 +40,33 @@ class SerializerRegistroSerializerCasoDeTeste(TestCase):
         self.assertFalse(serializer_aluno.is_valid())
 
 
+class RegistroSerializerCasoDeTeste(TestCase):
+    def testa_serializer_valido_registro_serializer(self):
+        registro = Registro.objects.create(
+            matricula='170015311',
+            turma='A')
+
+        registro_dados = {
+            'matricula': registro.matricula,
+            'turma': registro.turma
+        }
+
+        serializer_registro = RegistroSerializer(data=registro_dados)
+        self.assertTrue(serializer_registro.is_valid())
+
+    def testa_serializer_invalido_registro_serializer(self):
+        registro = Registro.objects.create(
+            matricula='170015311',
+            turma='')
+
+        registro_dados = {
+            'matricula': registro.matricula,
+            'turma': registro.turma
+        }
+
+        serializer = RegistroSerializer(data=registro_dados)
         self.assertFalse(serializer.is_valid())
+
 
 class SerializerEditarAlunoCasoDeTeste(TestCase):
     def test_serializer_EditarAluno_valido(self):
