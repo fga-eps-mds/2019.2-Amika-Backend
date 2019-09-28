@@ -4,4 +4,6 @@ WORKDIR /amika-backend
 COPY requirements.txt /amika-backend/
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
-EXPOSE 8000
+COPY . /amika-backend/
+RUN python3 manage.py test
+CMD python3 manage.py runserver
