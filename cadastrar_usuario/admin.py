@@ -2,22 +2,22 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
 
-from .serializers import UsuarioAlunoSerializer, RegistrationSerializer, EditarAlunoSerializer
-from .models import UsuarioAluno
+from .serializers import AlunoSerializer, RegistrationSerializer, EditarAlunoSerializer
+from .models import Aluno
 
 class UsuarioProfessorAdmin(admin.ModelAdmin):
     fields = (
-        'matricula_aluno',
+        'matricula',
     )
     
-    add_serializer = UsuarioAlunoSerializer
+    add_serializer = AlunoSerializer
     serializer = EditarAlunoSerializer
-    model = UsuarioAluno
+    model = Aluno
 
     list_display = (
-        'matricula_aluno',
-        'nome_aluno',
-        'email_aluno',
+        'matricula',
+        'nome',
+        'email',
     )
 
-admin.site.register(UsuarioAluno, UsuarioProfessorAdmin)
+admin.site.register(Aluno, UsuarioProfessorAdmin)

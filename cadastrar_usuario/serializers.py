@@ -1,17 +1,17 @@
 from rest_framework import serializers
-from .models import UsuarioAluno, Registration
+from .models import Aluno, Registration
 
-class UsuarioAlunoSerializer(serializers.ModelSerializer):
+class AlunoSerializer(serializers.ModelSerializer):
 	class Meta:
-		model = UsuarioAluno
+		model = Aluno
 		fields = '__all__'
 
 	def create(self, validated_data):
-		aluno = UsuarioAluno(
-			nome_aluno=validated_data['nome_aluno'],
-			matricula_aluno=validated_data['matricula_aluno'],
-			email_aluno=validated_data['email_aluno'],
-			senha_aluno=validated_data['senha_aluno'],
+		aluno = Aluno(
+			nome=validated_data['nome'],
+			matricula=validated_data['matricula'],
+			email=validated_data['email'],
+			senha=validated_data['senha'],
 		)
 		aluno.save()
 		return aluno
@@ -31,5 +31,5 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
 class EditarAlunoSerializer(serializers.ModelSerializer):
 	class Meta:
-		model = UsuarioAluno
+		model = Aluno
 		fields = "__all__"

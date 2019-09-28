@@ -1,18 +1,18 @@
 from django.test import TestCase
-from cadastrar_usuario.models import UsuarioAluno, Registrar
+from cadastrar_usuario.models import Aluno, Registrar
 
 
-class UsuarioAlunoCasoDeTeste(TestCase):
-    def criar_UsuarioAluno(self, matricula_aluno="190015311", nome_aluno="Carlos Marcio", senha_aluno="192837465", email_aluno="carlosmarcio@unb.br"):
-        return UsuarioAluno.objects.create(matricula_aluno=matricula_aluno, nome_aluno=nome_aluno, senha_aluno=senha_aluno, email_aluno=email_aluno)
+class AlunoCasoDeTeste(TestCase):
+    def criar_Aluno(self, matricula="190015311", nome="Carlos Marcio", senha="192837465", email="carlosmarcio@unb.br"):
+        return Aluno.objects.create(matricula=matricula, nome=nome, senha=senha, email=email)
 
-    def test_UsuarioAluno_criacao(self):
-        aluno = self.criar_UsuarioAluno()
-        self.assertTrue(isinstance(aluno, UsuarioAluno))
-        self.assertEqual(aluno.matricula_aluno, aluno.matricula_aluno)
-        self.assertEqual(aluno.nome_aluno, aluno.nome_aluno)
-        self.assertEqual(aluno.senha_aluno, aluno.senha_aluno)
-        self.assertEqual(aluno.email_aluno, aluno.email_aluno)
+    def test_Aluno_criacao(self):
+        aluno = self.criar_Aluno()
+        self.assertTrue(isinstance(aluno, Aluno))
+        self.assertEqual(aluno.matricula, aluno.matricula)
+        self.assertEqual(aluno.nome, aluno.nome)
+        self.assertEqual(aluno.senha, aluno.senha)
+        self.assertEqual(aluno.email, aluno.email)
 
 class RegistrarCasoDeTeste(TestCase):
     def criar_Registrar(self, matricula="190015311", turma ="A"):
