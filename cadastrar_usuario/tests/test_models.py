@@ -13,3 +13,13 @@ class UsuarioAlunoCasoDeTeste(TestCase):
         self.assertEqual(Aluno.nome_aluno, Aluno.nome_aluno)
         self.assertEqual(Aluno.senha_aluno, Aluno.senha_aluno)
         self.assertEqual(Aluno.email_aluno, Aluno.email_aluno)
+
+class RegistrarCasoDeTeste(TestCase):
+    def criar_Registrar(self, matricula="190015311", turma ="A"):
+        return Registrar.objects.create(matricula=matricula, turma=turma)
+
+    def test_Registrar_criacao(self):
+        Aluno = self.criar_Registrar()
+        self.assertTrue(isinstance(Aluno, Registrar))
+        self.assertEqual(Aluno.matricula, Aluno.matricula)
+        self.assertEqual(Aluno.turma, Aluno.turma)
