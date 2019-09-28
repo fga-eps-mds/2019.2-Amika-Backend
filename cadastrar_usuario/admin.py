@@ -1,15 +1,14 @@
 from django.contrib import admin
-from django.contrib.auth import get_user_model
-from django.contrib.auth.admin import UserAdmin
 
-from .serializers import AlunoSerializer, RegistroSerializer, EditarAlunoSerializer
 from .models import Aluno
+from .serializers import AlunoSerializer, EditarAlunoSerializer
 
-class UsuarioProfessorAdmin(admin.ModelAdmin):
+
+class Professor(admin.ModelAdmin):
     fields = (
         'matricula',
     )
-    
+
     add_serializer = AlunoSerializer
     serializer = EditarAlunoSerializer
     model = Aluno
@@ -20,4 +19,5 @@ class UsuarioProfessorAdmin(admin.ModelAdmin):
         'email',
     )
 
-admin.site.register(Aluno, UsuarioProfessorAdmin)
+
+admin.site.register(Aluno, Professor)
