@@ -7,19 +7,19 @@ class UsuarioAlunoCasoDeTeste(TestCase):
         return UsuarioAluno.objects.create(matricula_aluno=matricula_aluno, nome_aluno=nome_aluno, senha_aluno=senha_aluno, email_aluno=email_aluno)
 
     def test_UsuarioAluno_criacao(self):
-        Aluno = self.criar_UsuarioAluno()
-        self.assertTrue(isinstance(Aluno, UsuarioAluno))
-        self.assertEqual(Aluno.matricula_aluno, Aluno.matricula_aluno)
-        self.assertEqual(Aluno.nome_aluno, Aluno.nome_aluno)
-        self.assertEqual(Aluno.senha_aluno, Aluno.senha_aluno)
-        self.assertEqual(Aluno.email_aluno, Aluno.email_aluno)
+        aluno = self.criar_UsuarioAluno()
+        self.assertTrue(isinstance(aluno, UsuarioAluno))
+        self.assertEqual(aluno.matricula_aluno, aluno.matricula_aluno)
+        self.assertEqual(aluno.nome_aluno, aluno.nome_aluno)
+        self.assertEqual(aluno.senha_aluno, aluno.senha_aluno)
+        self.assertEqual(aluno.email_aluno, aluno.email_aluno)
 
 class RegistrarCasoDeTeste(TestCase):
     def criar_Registrar(self, matricula="190015311", turma ="A"):
         return Registrar.objects.create(matricula=matricula, turma=turma)
 
     def test_Registrar_criacao(self):
-        Aluno = self.criar_Registrar()
-        self.assertTrue(isinstance(Aluno, Registrar))
-        self.assertEqual(Aluno.matricula, Aluno.matricula)
-        self.assertEqual(Aluno.turma, Aluno.turma)
+        aluno = self.criar_Registrar()
+        self.assertTrue(isinstance(aluno, Registrar))
+        self.assertEqual(aluno.matricula, aluno.matricula)
+        self.assertEqual(aluno.turma, aluno.turma)
