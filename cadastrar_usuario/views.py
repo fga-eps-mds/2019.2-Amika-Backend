@@ -2,14 +2,14 @@ from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Aluno, Registration
-from .serializers import AlunoSerializer, RegistrationSerializer
+from .models import Aluno, Registro
+from .serializers import AlunoSerializer, RegistroSerializer
 
 @api_view(['POST'])
 def cadastrar_aluno(request):
 	serializer = AlunoSerializer(data = request.data)
 	if serializer.is_valid():
-		registro = Registration.objects.filter(matricula=serializer.data["matricula"]).first()
+		registro = Registro.objects.filter(matricula=serializer.data["matricula"]).first()
 		if (registro):
 			aluno = AlunoSerializer.create(serializer, request.data)
 			return Response ({"Usuario cadastrado com sucesso!"})
@@ -18,9 +18,9 @@ def cadastrar_aluno(request):
 	else:
 		return Response({"Dados incorretos! Tente novamente"})
 
-class MultipleRegistrationsViewSet(generics.ListCreateAPIView):
-    queryset = Registration.objects.all()
-    serializer_class = RegistrationSerializer
+class RegistrosMultiplosViewSet(generics.ListCreateAPIView):
+    queryset = Registro.objects.all()
+    serializer_class = RegistroSerializer
 
     def create(self, request, *args, **kwargs):
         data = request.data.get("items") if 'items' in request.data else request.data

@@ -1,6 +1,6 @@
 from django.test import TestCase
-from cadastrar_usuario.models import Aluno, Registrar
-from cadastrar_usuario.serializers import AlunoSerializer, RegistrarSerializer, EditarAlunoSerializer
+from cadastrar_usuario.models import Aluno, Registro
+from cadastrar_usuario.serializers import AlunoSerializer, RegistroSerializer, EditarAlunoSerializer
 
 class SerializerAlunoCasoDeTeste(TestCase):
     def test_serializer_Aluno_valido(self):
@@ -16,17 +16,17 @@ class SerializerAlunoCasoDeTeste(TestCase):
         serializer = AlunoSerializer(data=data)
         self.assertFalse(serializer.is_valid())
 
-class SerializerRegistrarSerializerCasoDeTeste(TestCase):
-    def test_serializer_RegistrarSerializer_valido(self):
-        aluno = Registrar.objects.create(matricula='170015311', turma='A')
+class SerializerRegistroSerializerCasoDeTeste(TestCase):
+    def test_serializer_RegistroSerializer_valido(self):
+        aluno = Registro.objects.create(matricula='170015311', turma='A')
         data = {'matricula': aluno.matricula, 'turma': aluno.turma}
-        serializer = RegistrarSerializer(data=data)
+        serializer = RegistroSerializer(data=data)
         self.assertFalse(serializer.is_valid())
 
     def test_serializer_Aluno_invalido(self):
-        aluno = Registrar.objects.create(matricula='170015311', turma='')
+        aluno = Registro.objects.create(matricula='170015311', turma='')
         data = {'matricula': aluno.matricula, 'turma': aluno.turma}
-        serializer = RegistrarSerializer(data=data)
+        serializer = RegistroSerializer(data=data)
         self.assertFalse(serializer.is_valid())
 
 class SerializerEditarAlunoCasoDeTeste(TestCase):

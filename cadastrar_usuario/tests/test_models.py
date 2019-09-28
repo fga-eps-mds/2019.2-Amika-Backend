@@ -1,5 +1,5 @@
 from django.test import TestCase
-from cadastrar_usuario.models import Aluno, Registrar
+from cadastrar_usuario.models import Aluno, Registro
 
 
 class AlunoCasoDeTeste(TestCase):
@@ -14,12 +14,12 @@ class AlunoCasoDeTeste(TestCase):
         self.assertEqual(aluno.senha, aluno.senha)
         self.assertEqual(aluno.email, aluno.email)
 
-class RegistrarCasoDeTeste(TestCase):
-    def criar_Registrar(self, matricula="190015311", turma ="A"):
-        return Registrar.objects.create(matricula=matricula, turma=turma)
+class RegistroCasoDeTeste(TestCase):
+    def criar_Registro(self, matricula="190015311", turma ="A"):
+        return Registro.objects.create(matricula=matricula, turma=turma)
 
-    def test_Registrar_criacao(self):
-        aluno = self.criar_Registrar()
-        self.assertTrue(isinstance(aluno, Registrar))
+    def test_Registro_criacao(self):
+        aluno = self.criar_Registro()
+        self.assertTrue(isinstance(aluno, Registro))
         self.assertEqual(aluno.matricula, aluno.matricula)
         self.assertEqual(aluno.turma, aluno.turma)
