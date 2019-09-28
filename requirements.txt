@@ -6,3 +6,8 @@ psycopg2==2.8.3
 djangorestframework==3.10.3
 Markdown==3.1.1         # Markdown support for the browsable API.
 django-filter==2.2.0    # Filtering support
+
+# Heroku
+gunicorn==19.9.0
+django-heroku==0.3.1
+whitenoise==4.1.4
