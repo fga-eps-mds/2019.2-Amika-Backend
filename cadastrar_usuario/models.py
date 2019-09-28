@@ -10,5 +10,5 @@ class UsuarioAluno(models.Model):
 	email_aluno = models.CharField(max_length=50, unique=True)
 
 class Registration(models.Model):
-	matricula = models.CharField( max_length=9)
+	matricula = models.CharField(max_length=9)
 	turma = models.CharField(max_length=1)
