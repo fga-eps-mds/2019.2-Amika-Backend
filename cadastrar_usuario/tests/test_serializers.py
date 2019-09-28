@@ -69,14 +69,36 @@ class RegistroSerializerCasoDeTeste(TestCase):
 
 
 class SerializerEditarAlunoCasoDeTeste(TestCase):
-    def test_serializer_EditarAluno_valido(self):
-        aluno = Aluno.objects.create(nome = 'Shiryu Amigo', matricula='170015311', senha = '918273645', email = 'shiryuamigo@unb.br')
-        data = {'nome': aluno.nome, 'matricula': aluno.matricula, 'email': aluno.email, 'senha': aluno.senha}
-        serializer = EditarAlunoSerializer(data=data)
-        self.assertFalse(serializer.is_valid())
+    def testa_serializer_valido_editar_aluno_serializer(self):
+        aluno = Aluno.objects.create(
+            nome='Shiryu Amigo',
+            matricula='170015311',
+            senha='918273645',
+            email='shiryuamigo@unb.br')
 
-    def test_serializer_EditarAluno_invalido(self):
-        aluno = Aluno.objects.create(matricula='170015311', nome = '', senha = '918273645', email = 'shiryuamigo@unb.br')
-        data = {'nome': aluno.nome, 'matricula': aluno.matricula, 'email': aluno.email, 'senha': aluno.senha}
-        serializer = EditarAlunoSerializer(data=data)
+        aluno_dados = {
+            'nome': aluno.nome,
+            'matricula': aluno.matricula,
+            'email': aluno.email,
+            'senha': aluno.senha
+        }
+
+        serializer = EditarAlunoSerializer(data=aluno_dados)
+        self.assertTrue(serializer.is_valid())
+
+    def testa_serializer_invalido_editar_aluno_serializer(self):
+        aluno = Aluno.objects.create(
+            matricula='170015311',
+            nome='',
+            senha='918273645',
+            email='shiryuamigo@unb.br')
+
+        aluno_dados = {
+            'nome': aluno.nome,
+            'matricula': aluno.matricula,
+            'email': aluno.email,
+            'senha': aluno.senha
+        }
+
+        serializer = EditarAlunoSerializer(data=aluno_dados)
         self.assertFalse(serializer.is_valid())
