@@ -1,6 +1,6 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
-from turmas.views import listar_turmas, criar_turmas, deletar_turma, editar_turma
+from turmas.views import listar_turmas, criar_turmas, deletar_turma, editar_turma, get_turma
 from turmas.models import Turma
 
 class TurmaUrlsCasosDeTestes(SimpleTestCase):
@@ -19,3 +19,7 @@ class TurmaUrlsCasosDeTestes(SimpleTestCase):
     def testa_edita_turma(self):
          url = reverse('edita_turma', args = [1])
          self.assertEquals(resolve(url).func, editar_turma)
+
+    def testa_get_turma(self):
+        url = reverse('mostra_turma', args = [1])
+        self.assertEquals(resolve(url).func, get_turma)
