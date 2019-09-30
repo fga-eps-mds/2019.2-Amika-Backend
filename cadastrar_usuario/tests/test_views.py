@@ -3,10 +3,9 @@ from django.urls import reverse, include, path
 # from cadastrar_usuario.models import Project, Category, Expense
 import json
 from rest_framework.test import APITestCase, URLPatternsTestCase
-from cadastrar_usuario.views import MultipleRegistrationsViewSet
+from cadastrar_usuario.views import RegistrosMultiplosViewSet
 from rest_framework import status
 from django.views import generic
-from test_plus.test import CBVTestCase
 
 class AccountTests(APITestCase, URLPatternsTestCase):
     urlpatterns = [
@@ -25,7 +24,7 @@ class AccountTests(APITestCase, URLPatternsTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         #self.assertEqual(response.data, data)
 
-class MultipleRegistrationsViewTest(TestCase):
+class RegistrosMultiplosViewTest(TestCase):
 
     def setUp(self):
 
@@ -44,6 +43,6 @@ class MultipleRegistrationsViewTest(TestCase):
         response = self.client.post(self.url, data, format='json')
         """Retire o id antes de testar o dado que chega, pois o id é adicionado automaticamente e 
         não precisamos verificar ele."""
-        response.data.pop('id')
+        #response.data.pop('id')
         self.assertEqual(response.data, data)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

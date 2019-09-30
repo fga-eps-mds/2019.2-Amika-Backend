@@ -1,27 +1,28 @@
-from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import UsuarioAluno, Registration
-from .serializers import UsuarioAlunoSerializer, RegistrationSerializer
+
+from .models import Registro, Aluno
+from .serializers import AlunoSerializer, RegistroSerializer
 from rest_framework import status
 
 @api_view(['POST'])
 def cadastrar_aluno(request):
-	serializer = UsuarioAlunoSerializer(data = request.data)
-	if serializer.is_valid():
-		registro = Registration.objects.filter(matricula=serializer.data["matricula_aluno"]).first()
-		if (registro):
-			aluno = UsuarioAlunoSerializer.create(serializer, request.data)
-			return Response ({"Usuario cadastrado com sucesso!"})
-		else:
-			return Response ({"Não foi possível encontrar um aluno com esta matricula na disciplina, tente novamente!"})		
-	else:
-		return Response({"Dados incorretos! Tente novamente"})
+    serializer = AlunoSerializer(data=request.data)
+    if serializer.is_valid():
+        registro = Registro.objects.filter(matricula=serializer.data["matricula"]).first()
+        if (registro):
+            aluno = AlunoSerializer.create(serializer, request.data)
+            return Response({"Usuario cadastrado com sucesso!"})
+        else:
+            return Response({"Não foi possível encontrar um aluno com esta matricula na disciplina, tente novamente!"})
+    else:
+        return Response({"Dados incorretos! Tente novamente"})
 
-class MultipleRegistrationsViewSet(generics.ListCreateAPIView):
-    queryset = Registration.objects.all()
-    serializer_class = RegistrationSerializer
+
+class RegistrosMultiplosViewSet(generics.ListCreateAPIView):
+    queryset = Registro.objects.all()
+    serializer_class = RegistroSerializer
 
     def create(self, request, *args, **kwargs):
         data = request.data.get("items") if 'items' in request.data else request.data
