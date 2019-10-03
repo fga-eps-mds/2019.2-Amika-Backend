@@ -27,6 +27,7 @@ script:
     while ! docker logs backend | grep "Starting development server at http://0:8000/"; do
       sleep 5
     done;
+  - docker exec -it backend python3 manage.py migrate
   - docker exec -it backend python3 manage.py test
 
 after_script:
