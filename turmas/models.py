@@ -3,6 +3,6 @@ from django.db import models
 # Create your models here.
 
 class Turma(models.Model):
-    nome_turma = models.CharField(max_length = 100) 
-    ano_turma = models.IntegerField()                        
-    periodo_turma = models.IntegerField()  
+    nome = models.CharField(max_length = 100) 
+    ano = models.IntegerField()                        
+    periodo = models.IntegerField()  
