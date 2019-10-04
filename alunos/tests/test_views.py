@@ -48,14 +48,6 @@ class TestesCadastraAluno(TestCase):
 
 
 class TestesUsuarioAutenticado(APITestCase):
-    def setUp(self):
-        user = User.objects.create(
-            username="root",
-            password="123",
-            is_superuser=True,
-            is_staff=True)
-        self.client.force_authenticate(user)
-
     def teste_lista_alunos(self):
         response = self.client.get(reverse('lista_alunos'), format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)

@@ -1,8 +1,7 @@
 import datetime
 
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .models import Registro, Aluno
@@ -10,7 +9,6 @@ from .serializers import AlunoSerializer, RegistroSerializer
 
 
 @api_view(['POST'])
-@permission_classes([AllowAny])
 def cadastra_aluno(request):
     if Registro.objects.filter(matricula=int(request.data['username']),
                                periodo__ano=datetime.date.today().year,
