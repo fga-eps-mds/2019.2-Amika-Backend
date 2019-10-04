@@ -7,20 +7,20 @@ from .models import Turma
 from .serializers import TurmaSerializer
 from django.http import JsonResponse
 
-@api_view(['GET'])
-def listar_turmas(request):
-    queryset = Turma.objects.all()
-    serializer_class = TurmaSerializer(queryset, many=True)
-    return Response(serializer_class.data, status=status.HTTP_200_OK)
+@api_view(['GET', 'POST'])
+def gerenciar_turmas(request):
+	if request.method == 'GET':
+		queryset = Turma.objects.all()
+		serializer_class = TurmaSerializer(queryset, many=True)
+		return Response(serializer_class.data, status=status.HTTP_200_OK)
 
-@api_view(['POST'])
-def criar_turmas(request):
-	serializer = TurmaSerializer(data = request.data)
-	if serializer.is_valid():
-		turma = TurmaSerializer.create(serializer, request.data)
-		return Response (serializer.data, status=status.HTTP_201_CREATED)
-	else:
-		return Response (serializer.erros, status=status.HTPP_400_BAD_REQUEST)
+	if request.method == 'POST':
+		serializer = TurmaSerializer(data = request.data)
+		if serializer.is_valid():
+			turma = TurmaSerializer.create(serializer, request.data)
+			return Response (serializer.data, status=status.HTTP_201_CREATED)
+		else:
+			return Response (serializer.erros, status=status.HTPP_400_BAD_REQUEST)
 
 @api_view(['GET', 'DELETE' , 'PUT'])
 def gerencia_turma(request, pk):
