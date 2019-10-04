@@ -7,7 +7,6 @@ from .models import Turma
 from .serializers import TurmaSerializer
 from django.http import JsonResponse
 
-
 @api_view(['GET'])
 def listar_turmas(request):
     queryset = Turma.objects.all()
@@ -23,12 +22,9 @@ def criar_turmas(request):
 	else:
 		return Response (serializer.erros, status=status.HTPP_400_BAD_REQUEST)
 
-def get_id(pk):
-	return Turma.objects.get(pk = pk)
-
 @api_view(['GET', 'DELETE' , 'PUT'])
 def get_turma(request, pk):
-	turma = get_id(pk)
+	turma = Turma.objects.filter(pk = pk).first()
 
 	if request.method == 'GET':
 		queryset = Turma.objects.get(pk = pk)
