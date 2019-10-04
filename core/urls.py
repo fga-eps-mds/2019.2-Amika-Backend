@@ -5,7 +5,7 @@ from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('turmas/', include('turmas.urls')),
+    path('', include('turmas.urls')),
     path('api-auth/', include('rest_framework.urls')),
     url(r'^login/', obtain_jwt_token),
 ]
