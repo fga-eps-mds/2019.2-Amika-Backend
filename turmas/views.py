@@ -23,7 +23,7 @@ def criar_turmas(request):
 		return Response (serializer.erros, status=status.HTPP_400_BAD_REQUEST)
 
 @api_view(['GET', 'DELETE' , 'PUT'])
-def get_turma(request, pk):
+def gerencia_turma(request, pk):
 	turma = Turma.objects.filter(pk = pk).first()
 
 	if request.method == 'GET':
