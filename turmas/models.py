@@ -6,6 +6,13 @@ class Turma(models.Model):
     nome = models.CharField(max_length = 100)         
     periodo = models.ForeignKey("Periodo", related_name='periodo', on_delete=PROTECT)
 
+    def __str__(self):
+        return "{} {}".format(self.nome, self.periodo)
+
+
 class Periodo(models.Model):
     ano = models.IntegerField(choices=[(y, y) for y in range(2019, datetime.date.today().year + 1)])
     semestre = models.IntegerField(choices=[(1, 1), (2, 2)])
+
+    def __str__(self):
+        return "{}/{}".format(self.ano, self.semestre)
