@@ -25,23 +25,22 @@ def criar_turmas(request):
 def get_id(pk):
 	return Turma.objects.get(pk = pk)
 
-@api_view(['GET'])
+@api_view(['GET', 'DELETE' , 'PUT'])
 def get_turma(request, pk):
-    queryset = Turma.objects.get(pk = pk)
-    serializer_class = TurmaSerializer(queryset)
-    return Response (serializer_class.data)
+	turma = get_id(pk)
 
-@api_view(['DELETE'])
-def deletar_turma(request,pk):
-	Turma = get_id(pk)
-	Turma.delete()
-	return Response({'turma deletada'})
+	if request.method == 'GET':
+		queryset = Turma.objects.get(pk = pk)
+		serializer_class = TurmaSerializer(queryset)
+		return Response (serializer_class.data)
 
-@api_view(['PUT'])
-def editar_turma(request, pk):
-	Turma = get_id(pk)
-	serializer_class = TurmaSerializer(Turma, partial = True, data = request.data)
-	if serializer_class.is_valid(raise_exception = True):
-		serializer_class.save()
-		return Response(serializer_class.data)
-	return Response ({"Turma editada"})
+	if request.method == 'DELETE':
+		turma.delete()
+		return Response({'turma deletada'})
+
+	if request.method == 'PUT':
+		serializer_class = TurmaSerializer(turma, partial = True, data = request.data)
+		if serializer_class.is_valid(raise_exception = True):
+			serializer_class.save()
+			return Response(serializer_class.data)
+		return Response ({"Turma editada"})
