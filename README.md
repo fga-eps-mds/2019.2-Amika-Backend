@@ -5,27 +5,38 @@
 </p>
 
 
+#### [Amika-Backend](https://github.com/fga-eps-mds/2019.2-Amika-Backend)
+[![Build Status](https://travis-ci.org/fga-eps-mds/2019.2-Amika-Backend.svg?branch=master)](https://travis-ci.org/fga-eps-mds/2019.2-Amika-Backend)
+[![Maintainability](https://api.codeclimate.com/v1/badges/fa0fbed2c8fa7014e542/maintainability)](https://codeclimate.com/github/fga-eps-mds/2019.2-Amika-Backend/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/fa0fbed2c8fa7014e542/test_coverage)](https://codeclimate.com/github/fga-eps-mds/2019.2-Amika-Backend/test_coverage)
+
 #### Ambientes:
 - [Desenvolvimento](https://amika-backend-dev.herokuapp.com/)
 - [Homologação](https://amika-backend-stg.herokuapp.com/)
 - [Produção](https://amika-backend.herokuapp.com/)
 
-#### [Amika-Backend](https://github.com/fga-eps-mds/2019.2-Amika-Backend)
-[![Build Status](https://travis-ci.org/fga-eps-mds/2019.2-Amika-Backend.svg?branch=master)](https://travis-ci.org/fga-eps-mds/2019.2-Amika-Backend)
-[![Maintainability](https://api.codeclimate.com/v1/badges/fa0fbed2c8fa7014e542/maintainability)](https://codeclimate.com/github/fga-eps-mds/2019.2-Amika-Backend/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/fa0fbed2c8fa7014e542/test_coverage)](https://codeclimate.com/github/fga-eps-mds/2019.2-Amika-Backend/test_coverage)
+#### [Amika-Frontend](https://github.com/fga-eps-mds/2019.2-Amika-Frontend)
+[![Build Status](https://travis-ci.org/fga-eps-mds/2019.2-Amika-Frontend.svg?branch=master)](https://travis-ci.org/fga-eps-mds/2019.2-Amika-Frontend)
+[![Maintainability](https://api.codeclimate.com/v1/badges/e6c21399ba32b11ab1d1/maintainability)](https://codeclimate.com/github/fga-eps-mds/2019.2-Amika-Frontend/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/e6c21399ba32b11ab1d1/test_coverage)](https://codeclimate.com/github/fga-eps-mds/2019.2-Amika-Frontend/test_coverage)
+
 #### Ambientes:
 - [Desenvolvimento](https://amika-dev.herokuapp.com/)
 - [Homologação](https://amika-stg.herokuapp.com/)
 - [Produção](https://amika-prod.herokuapp.com/)
 
+#### [Amika-Wiki](https://github.com/fga-eps-mds/2019.2-Amika-Wiki)
+- [Github Pages](https://fga-eps-mds.github.io/2019.2-Amika-Wiki/#/)
+
+
 ## Sobre
 
-Amika é um Progressive Web App com o objetivo de auxiliar a organização da disciplina de Tópicos Especiais em Engenharia de Software, com abordagem em Felicidade, da Universidade de Brasília. Assim como também proporcionar para os alunos um ambiente de interação e ajuda para lidar com problemas de saúde mental, fornecendo uma experiência mais agradável.
+Amika é um Progressive Web App com o objetivo de auxiliar a organização da disciplina de Tópicos Especiais em Engenharia de Software, com abordagem em Felicidade, da Universidade de Brasília. Assim como também proporcionar para os alunos um ambiente de interação e ajuda para lidar com problemas de saúde mental, fornecendo uma experiência mais agradável. Este repositório se refere ao Backend da aplicação, caso deseje contribuir com nosso Frontend, visite o repositório: [Amika-Frontend](https://github.com/fga-eps-mds/2019.2-Amika-Frontend). 
+
 
 ## Tecnologias Utilizadas
 
-Este repositório se refere ao Backend da aplicação, caso deseje contribuir com nosso Frontend, visite o repositório: [Amika-Frontend](https://github.com/fga-eps-mds/2019.2-Amika-Frontend). Este repositório foi desenvovido com o framework [Django](https://www.djangoproject.com) escrito em [Python](https://www.python.org) e se comunica com o frontend criando a API da aplicação utilizando o [Django REST framework](https://www.django-rest-framework.org) na qual o Frontend realiza requisições HTTP. O ambiente de desenvolvimento é isolado em containers com o [Docker](https://www.docker.com) e o gerenciamento é feito pelo [Docker Compose](https://docs.docker.com/compose/). A integração contínua é feita pelo [Travis CI](https://docs.travis-ci.com). Os deployments de desenvolvimentos, homologações e produções são feitos no [Heroku](https://devcenter.heroku.com).
+Este repositório foi desenvovido com o framework [Django](https://www.djangoproject.com) escrito em [Python](https://www.python.org) e se comunica com o frontend criando a API da aplicação utilizando o [Django REST framework](https://www.django-rest-framework.org) na qual o Frontend realiza requisições HTTP. O ambiente de desenvolvimento é isolado em containers com o [Docker](https://www.docker.com) e o gerenciamento é feito pelo [Docker Compose](https://docs.docker.com/compose/). A integração contínua é feita pelo [Travis CI](https://docs.travis-ci.com). Os deployments de desenvolvimentos, homologações e produções são feitos no [Heroku](https://devcenter.heroku.com).
 
 ## Instalação
 
@@ -98,9 +109,6 @@ Este repositório se refere ao Backend da aplicação, caso deseje contribuir co
   python3 manage.py test
   ```
   
-## Documentação
-
-Documentação do porjeto está disponível em [Amika Wiki](https://fga-eps-mds.github.io/2019.2-Amika-Wiki/#/).
 
 #### Como contribuir
 Para contribuir com o projeto é importante seguir o [Guia de Contribuição](https://github.com/fga-eps-mds/2019.2-Amika-Wiki/blob/master/.github/CONTRIBUTING.md) do repositório, assim como seguir as [Politicas de Commits e Branches](https://fga-eps-mds.github.io/2019.2-Amika-Wiki/#/docs/projeto/planogerencia) presentes no nosso plano de gerencia de software.
