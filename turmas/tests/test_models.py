@@ -1,18 +1,19 @@
 from django.test import TestCase
-from turmas.models import Turma
+from turmas.models import Turma, Periodo
 
-class TurmaCasosDeTeste(TestCase):
-    def criar_turma(self):
-        turma = Turma.objects.create(
-            nome_turma = "Felicidade",
-            ano_turma = 2019,
-            periodo_turma = 2
+class TestesPeriodo(TestCase):
+    def setUp(self):
+        Periodo.objects.create(ano=2019, semestre=2)
+
+    def testa_str_do_objeto(self):
+        self.assertEqual(str(Periodo.objects.first()), "2019/2")
+
+class TestesTurma(TestCase):
+    def setUp(self):
+        Turma.objects.create(
+            nome = "Felicidade",
+            periodo = Periodo.objects.create(ano=2019, semestre=2)
         )
-        return turma
-    
-    def testa_criacao_turma(self):
-        turma = self.criar_turma()
-        self.assertTrue(isinstance(turma, Turma))
-        self.assertEqual(turma.nome_turma, "Felicidade")
-        self.assertEqual(turma.ano_turma, 2019)
-        self.assertEqual(turma.periodo_turma, 2)
+
+    def testa_str_do_objeto(self):
+        self.assertEqual(str(Turma.objects.first()), "Felicidade 2019/2")
