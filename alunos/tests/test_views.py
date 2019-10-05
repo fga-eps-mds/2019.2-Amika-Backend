@@ -8,7 +8,7 @@ from alunos.models import Registro, Periodo
 
 
 class TestesAluno(TestCase):
-    def testa_cadastra_de_aluno(self):
+    def setUp(self) -> None:
         Registro.objects.create(
             matricula=123456789,
             turma="A",
@@ -16,6 +16,7 @@ class TestesAluno(TestCase):
                 ano=2019,
                 semestre=2))
 
+    def testa_cadastra_de_aluno(self):
         aluno_dados = {
             'username': '123456789',
             'first_name': "Nome",
@@ -25,14 +26,12 @@ class TestesAluno(TestCase):
         response = self.client.post(reverse('cadastra_aluno'), aluno_dados, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    def teste_nao_cadastra_aluno_com_falta_de_dados(self):
-        Registro.objects.create(
-            matricula=123456789,
-            turma="A",
-            periodo=Periodo.objects.create(
-                ano=2019,
-                semestre=2))
+    def teste_nao_cadastra_aluno_sem_dados(self):
+        aluno_dados = {}
+        response = self.client.post(reverse('cadastra_aluno'), aluno_dados, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def teste_nao_cadastra_aluno_com_falta_de_dados(self):
         aluno_dados = {
             'username': '123456789',
             'first_name': "Nome",

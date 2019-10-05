@@ -21,17 +21,20 @@ URL_CHOICES = {
 
 @api_view(['POST'])
 def cadastra_aluno(request):
-    if Registro.objects.filter(matricula=int(request.data['username']),
-                               periodo__ano=datetime.date.today().year,
-                               periodo__semestre=1 if datetime.date.today().month <= 6 else 2):
-        serializer = AlunoSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    if request.data:
+        if Registro.objects.filter(matricula=int(request.data['username']),
+                                   periodo__ano=datetime.date.today().year,
+                                   periodo__semestre=1 if datetime.date.today().month <= 6 else 2):
+            serializer = AlunoSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"Aluno não matriculado no período atual."}, status=status.HTTP_400_BAD_REQUEST)
     else:
-        return Response({"Aluno não matriculado no período atual."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['POST'])
