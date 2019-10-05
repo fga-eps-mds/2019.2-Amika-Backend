@@ -51,7 +51,7 @@ def cadastra_registro(request):
         else:
             return Response([datas, errors], status=status.HTTP_400_BAD_REQUEST)
     else:
-
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 
