@@ -20,4 +20,4 @@ class TurmaPeriodoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Turma
-        fields = ('nome', 'ano', 'semestre')
+        fields = ('id','nome', 'ano', 'semestre')
