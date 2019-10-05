@@ -54,6 +54,37 @@ class TestesAluno(TestCase):
 
 
 class TestesRegistro(TestCase):
+    def teste_cadastra_registros_sem_erros(self):
+        registro_dados = [{
+            "matricula": 123456781,
+            "turma": "A"
+        }]
+        response = self.client.post(reverse('cadastra_registro'), registro_dados, content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def teste_cadastra_registros_com_erros(self):
+        registro_dados = [
+            {
+                "matricula": 123456781,
+                "turma": "A"
+            },
+            {
+                "matricula": 123456781,
+                "turma": "A"
+            },
+            {
+                "matricula": 123456782,
+                "turma": "A"
+            }
+        ]
+        response = self.client.post(reverse('cadastra_registro'), registro_dados, content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def teste_nao_cadastra_registro_sem_dados(self):
+        registro_dados = {}
+        response = self.client.post(reverse('cadastra_registro'), registro_dados, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def teste_remove_registro(self):
         Registro.objects.create(
             matricula=123456789,
