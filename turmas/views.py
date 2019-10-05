@@ -8,7 +8,7 @@ from .serializers import TurmaSerializer, TurmaPeriodoSerializer
 from django.http import JsonResponse
 
 @api_view(['GET', 'POST'])
-def gerenciar_turmas(request):
+def gerencia_turmas(request):
 	if request.method == 'GET':
 		queryset = Turma.objects.all()
 		serializer_class = TurmaPeriodoSerializer(queryset, many=True)
