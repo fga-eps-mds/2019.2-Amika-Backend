@@ -4,14 +4,14 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Turma
-from .serializers import TurmaSerializer
+from .serializers import TurmaSerializer, TurmaPeriodoSerializer
 from django.http import JsonResponse
 
 @api_view(['GET', 'POST'])
 def gerenciar_turmas(request):
 	if request.method == 'GET':
 		queryset = Turma.objects.all()
-		serializer_class = TurmaSerializer(queryset, many=True)
+		serializer_class = TurmaPeriodoSerializer(queryset, many=True)
 		return Response(serializer_class.data, status=status.HTTP_200_OK)
 
 	if request.method == 'POST':
