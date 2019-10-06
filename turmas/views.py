@@ -18,9 +18,9 @@ def gerencia_turmas(request):
 		serializer = TurmaSerializer(data = request.data)
 		if serializer.is_valid():
 			turma = TurmaSerializer.create(serializer, request.data)
-			return Response (serializer.data, status=status.HTTP_201_CREATED)
+			return Response(serializer.data, status=status.HTTP_201_CREATED)
 		else:
-			return Response (serializer.erros, status=status.HTPP_400_BAD_REQUEST)
+			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'DELETE' , 'PUT'])
 def gerencia_turma(request, pk):
@@ -29,7 +29,7 @@ def gerencia_turma(request, pk):
 	if request.method == 'GET':
 		queryset = Turma.objects.get(pk = pk)
 		serializer_class = TurmaSerializer(queryset)
-		return Response (serializer_class.data, status=status.HTTP_200_OK)
+		return Response(serializer_class.data, status=status.HTTP_200_OK)
 
 	if request.method == 'DELETE':
 		turma.delete()
@@ -40,4 +40,4 @@ def gerencia_turma(request, pk):
 		if serializer_class.is_valid(raise_exception = True):
 			serializer_class.save()
 			return Response(serializer_class.data, status=status.HTTP_200_OK)
-		return Response ({"Turma editada"})
+		return Response({"Turma editada"})
