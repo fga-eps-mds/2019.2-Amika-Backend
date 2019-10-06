@@ -1,49 +1,56 @@
 from django.test import TestCase, Client
-from rest_framework.test import APIClient
 from django.urls import reverse
-from turmas.views import Turma
-from turmas.serializers import TurmaSerializer
-import json
+from rest_framework import status
+from turmas.models import Turma, Periodo
 
-class TurmaViewsCasosdeTeste(TestCase):
-    cliente = APIClient()
+class TestesGerenciaDeTurmas(TestCase):
+    def teste_cadastro_turma(self):
+        turma_dados = {
+            "nome": "Felicidade",
+            "ano": 2019,
+            "semestre": 2
+        }   
 
-    def criar_turma(self):
+        response = self.client.post(reverse('gerencia_turmas'), turma_dados, format='json')
+        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
+    
+    def teste_cadastro_turma_com_dados_incompletos(self):
+        turma_dados_incompletos = {
+            "ano": 2019,
+            "semestre": 2
+        }      
+        response = self.client.post(reverse('gerencia_turmas'), turma_dados_incompletos, format='json')
+        self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def teste_visualizacao_turmas(self):
+        response = self.client.get(reverse('gerencia_turmas'))
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+
+  
+class TestesGerenciaDeTurma(TestCase):        
+    def teste_visualizacao_turma(self): 
         turma = Turma.objects.create(
-            nome_turma = "Felicidade",
-            ano_turma = 2019,
-            periodo_turma = 2
+            nome = "Felicidade",
+            periodo = Periodo.objects.create(ano=2019, semestre=2)
         )
-        return turma
+        id = turma.id
+        response = self.client.get(reverse('gerencia_turma', args = [id]))
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
 
-    def testa_listar_turmas_GET(self):
-        resposta = self.cliente.get(reverse('lista_turmas'))
-        self.assertEquals(resposta.status_code, 200)
+    def teste_edicao_turma(self):
+        turma = Turma.objects.create(
+            nome = "Felicidade",
+            periodo = Periodo.objects.create(ano=2019, semestre=2)
+        )
+        id = turma.id
+        response = self.client.put(reverse('gerencia_turma', args = [id]))
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
 
-    def testa_criar_turmas_POST(self):
-        resposta = self.cliente.post(reverse('cria_turmas'), {
-            'nome_turma':'Felicidade',
-            'ano_turma':'2019',
-            'periodo_turma':'2'
-        }, format='json')
-        self.assertEquals(resposta.status_code, 200)
-
-    def testa_get_turma_GET(self):
-        turma = self.criar_turma()
-        id = turma.pk
-        resposta = self.client.get(reverse('mostra_turma', args = [id]))
-        self.assertEquals(resposta.status_code, 200)
-
-    def testa_editar_turma_PUT(self):
-        turma = self.criar_turma()
-        id = turma.pk
-        resposta = self.cliente.put(reverse('edita_turma', args = [id]))
-        self.assertEquals(resposta.status_code, 200)
-
-    def testa_deletar_turmas_DELETE(self):
-        turma = self.criar_turma()
-        id = turma.pk
-        resposta = self.cliente.delete(reverse('deleta_turma', args = [id]))
-        self.assertEquals(resposta.status_code, 200)
-
-
+    def teste_remocao_turma(self):
+        turma = Turma.objects.create(
+            nome = "Felicidade",
+            periodo = Periodo.objects.create(ano=2019, semestre=2)
+        )
+        id = turma.id
+        response = self.client.delete(reverse('gerencia_turma', args = [id]))
+        self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)
