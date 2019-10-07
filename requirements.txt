@@ -8,6 +8,7 @@ djangorestframework==3.10.3
 djangorestframework-jwt==1.11.0
 Markdown==3.1.1         # Markdown support for the browsable API.
 django-filter==2.2.0    # Filtering support
+django-cors-headers==3.1.0
 
 # Heroku
 gunicorn==19.9.0
