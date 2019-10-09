@@ -44,12 +44,12 @@ def gerencia_turma(request, pk):
 			return Response(serializer_class.data, status=status.HTTP_200_OK)
 		return Response(status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST', 'GET', 'PUT'])
-def gerencia_agenda(request):
+@api_view(['POST', 'GET', 'PUT', 'DELETE'])
+def gerencia_agendas(request):
 	if request.method == 'GET':
 		queryset = Agenda.objects.all()
-		serializer_class = AgendaSerializer(queryset, many=True)
-		return Response(serializer_class.data, status=status.HTTP_200_OK)
+		serializer = AgendaSerializer(queryset, many=True)
+		return Response(serializer.data, status=status.HTTP_200_OK)
 
 	if request.method == 'POST':
 		print(request.data['tipo'])
@@ -62,3 +62,23 @@ def gerencia_agenda(request):
 			return Response(serializer.data, status=status.HTTP_201_CREATED)
 		else:
 			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def gerencia_agenda(request, pk):
+	agenda = Agenda.objects.filter(pk = pk).first()
+	
+	if request.method == 'PUT':
+		serializer = AgendaSerializer(agenda, partial = True, data = request.data)
+		if serializer.is_valid():
+			serializer.save()
+			return Response(serializer.data, status=status.HTTP_200_OK)
+		return Response(status=status.HTTP_400_BAD_REQUEST)
+
+	if request.method == 'DELETE':
+		agenda.delete()
+		return Response(status=status.HTTP_204_NO_CONTENT)
+	
+	if request.method == 'GET':
+		serializer = AgendaSerializer(agenda)
+		return Response(serializer.data, status=status.HTTP_200_OK)
+		
