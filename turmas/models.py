@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models import PROTECT
-import datetime
+from datetime import datetime, date
 
 class Turma(models.Model):
     nome = models.CharField(max_length = 100)         
@@ -11,20 +11,25 @@ class Turma(models.Model):
 
 
 class Periodo(models.Model):
-    ano = models.IntegerField(choices=[(y, y) for y in range(2019, datetime.date.today().year + 1)])
+    ano = models.IntegerField(choices=[(y, y) for y in range(2019, date.today().year + 1)])
     semestre = models.IntegerField(choices=[(1, 1), (2, 2)])
 
     def __str__(self):
         return "{}/{}".format(self.ano, self.semestre)
 
+TIPO_CHOICES = (
+    ("Individual", "Individual"), 
+    ("Grupo", "Grupo"),
+)
+
 class Agenda(models.Model):
-    nome = models.CharField(max_lenght = 100)
-    desricao = models.CharField(max_lenght = 500) 
-    tipo = models.BooleanField()
+    nome = models.CharField(max_length = 100)
+    descricao = models.CharField(max_length = 500) 
+    tipo = models.CharField(max_length=10, choices=TIPO_CHOICES)
     data_disponibilizacao = models.DateField(default=datetime.now)
 
 class Atividade(models.Model):
     data_entrega = models.DateField()
-    texto = models.TextField(max_lenght = 500)
+    texto = models.TextField(max_length = 500)
     arquivo = models.FileField()
-    agenda = models.ForeignKey("Agenda", related_name='agenda')
+    agenda = models.ForeignKey("Agenda", related_name='agenda', on_delete=PROTECT)
