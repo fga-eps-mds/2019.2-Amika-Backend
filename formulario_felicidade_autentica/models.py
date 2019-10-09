@@ -1,3 +1,7 @@
 from django.db import models
+from django.db.models import PROTECT
+import datetime
 
-# Create your models here.
+class Formulario_Felicidade_Autentica(models.Model):
+    pontuacao = float         
+    
