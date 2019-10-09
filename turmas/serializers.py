@@ -1,4 +1,4 @@
-from .models import Turma, Periodo
+from .models import Turma, Periodo, Agenda
 from rest_framework import serializers
 import datetime
 
@@ -21,3 +21,13 @@ class TurmaPeriodoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Turma
         fields = ('id','nome', 'ano', 'semestre')
+
+class AgendaSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = Agenda
+        fields = ('nome', 'descricao', 'tipo')
+
+    def __init__(self, *args, **kwargs):
+        super(AgendaSerializer, self).__init__(*args, **kwargs)
+        if kwargs:
+            kwargs['data']['tipo'] = kwargs['data']['tipo'].capitalize()
