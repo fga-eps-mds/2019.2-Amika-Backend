@@ -16,3 +16,15 @@ class Periodo(models.Model):
 
     def __str__(self):
         return "{}/{}".format(self.ano, self.semestre)
+
+class Agenda(models.Model):
+    nome = models.CharField(max_lenght = 100)
+    desricao = models.CharField(max_lenght = 500) 
+    tipo = models.BooleanField()
+    data_disponibilizacao = models.DateField(default=datetime.now)
+
+class Atividade(models.Model):
+    data_entrega = models.DateField()
+    texto = models.TextField(max_lenght = 500)
+    arquivo = models.FileField()
+    agenda = models.ForeignKey("Agenda", related_name='agenda')
