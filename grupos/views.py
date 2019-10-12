@@ -52,6 +52,11 @@ def deleta_grupo(grupo):
     grupo.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
+def aloca_alunos_grupo(alunos):
+    alunos = Aluno.objects.all()
+    qntd_alunos = alunos.count()
+    lista = random.sample(range(1, qntd_alunos + 1), qntd_alunos)
+    lista_alunos = [alunos[i] for i in lista]
 
 
 
