@@ -17,12 +17,11 @@ class Periodo(models.Model):
     def __str__(self):
         return "{}/{}".format(self.ano, self.semestre)
 
-TIPO_CHOICES = (
-    ("Individual", "Individual"), 
-    ("Grupo", "Grupo"),
-)
-
 class Agenda(models.Model):
+    TIPO_CHOICES = (
+        ("Individual", "Individual"), 
+        ("Grupo", "Grupo"),
+    )
     nome = models.CharField(max_length = 100)
     descricao = models.CharField(max_length = 500) 
     tipo = models.CharField(max_length=10, choices=TIPO_CHOICES)
