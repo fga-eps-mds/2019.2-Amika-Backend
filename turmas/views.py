@@ -44,18 +44,15 @@ def gerencia_turma(request, pk):
 			return Response(serializer_class.data, status=status.HTTP_200_OK)
 		return Response(status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST', 'GET', 'PUT', 'DELETE'])
+@api_view(['POST', 'GET'])
 def gerencia_agendas(request):
+	request.POST._mutable = True 
 	if request.method == 'GET':
 		queryset = Agenda.objects.all()
 		serializer = AgendaSerializer(queryset, many=True)
 		return Response(serializer.data, status=status.HTTP_200_OK)
 
 	if request.method == 'POST':
-		print(request.data['tipo'])
-		"""request.data['tipo'] = request.data['tipo'].lower()
-		escolha_temporaria = request.data['tipo']"""
-		print(request.data['tipo'])
 		serializer = AgendaSerializer(data = request.data)
 		if serializer.is_valid():
 			serializer.save()
