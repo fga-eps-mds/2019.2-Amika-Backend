@@ -1,7 +1,7 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from rest_framework import status
-from turmas.models import Turma, Periodo
+from turmas.models import Turma, Periodo, Agenda
 
 class TestesGerenciaDeTurmas(TestCase):
     def teste_cadastro_turma(self):
@@ -54,3 +54,45 @@ class TestesGerenciaDeTurma(TestCase):
         id = turma.id
         response = self.client.delete(reverse('gerencia_turma', args = [id]))
         self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)
+    
+class TestesGerenciaDeAgendas(TestCase):
+    def teste_criacao_agenda(self):
+        dados_agenda = {
+            "nome": "Atividade 8",
+            "descricao": "descricao agenda...",
+            "tipo": "Individual",
+        }
+
+        response = self.client.post(reverse('gerencia_agendas'), dados_agenda, format='json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def teste_visualizacao_agendas(self):
+        response = self.client.get(reverse('gerencia_agendas'))
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+
+class TestesGerenciaDeAgenda(TestCase):
+    def setUp(self):
+        Agenda.objects.create(
+            nome="Atividade 2",
+            descricao="descrição da agenda...",
+            tipo="Individual"
+        )
+        self.dados_agenda = {
+            "nome": "Atividade 2",
+            "descricao": "descricao agenda...",
+            "tipo": "Individual",
+        }
+        self.id = Agenda.objects.first().id
+    
+    def teste_visualizazao_agenda(self):
+        response = self.client.get(reverse('gerencia_agenda', args=[self.id]))
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+
+    def teste_edicao_agendas(self):
+        response = self.client.put(reverse('gerencia_agenda', args=[self.id]), data=self.dados_agenda, content_type = 'application/json')
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+
+    def teste_remocao_agenda(self):
+        response = self.client.delete(reverse('gerencia_agenda', args=[self.id]))
+        self.assertEquals(response.status_code, status.HTTP_204_NO_CONTENT)
+    
