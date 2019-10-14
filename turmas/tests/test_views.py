@@ -61,6 +61,8 @@ class TestesGerenciaDeAgendas(TestCase):
             "nome": "Atividade 8",
             "descricao": "descricao agenda...",
             "tipo": "Individual",
+            "data_disponibilizacao": "2019-09-09",
+            "data_encerramento": "2019-09-10"
         }
 
         response = self.client.post(reverse('gerencia_agendas'), dados_agenda, format='json')
@@ -75,12 +77,16 @@ class TestesGerenciaDeAgenda(TestCase):
         Agenda.objects.create(
             nome="Atividade 2",
             descricao="descrição da agenda...",
-            tipo="Individual"
+            tipo="Individual",
+            data_disponibilizacao="2019-09-09",
+            data_encerramento="2019-09-20"
         )
         self.dados_agenda = {
             "nome": "Atividade 2",
             "descricao": "descricao agenda...",
             "tipo": "Individual",
+            "data_disponibilizacao": "2019-09-09",
+            "data_encerramento": "2019-09-10"
         }
         self.id = Agenda.objects.first().id
     

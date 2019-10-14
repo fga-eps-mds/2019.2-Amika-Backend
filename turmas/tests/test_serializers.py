@@ -21,11 +21,15 @@ class TestesAgendaSerializer(TestCase):
     def testa_criacao_de_objeto(self):
         dados_corretos = {'nome': 'Trabalho 2',
             'tipo': 'Individual',
-            'descricao': 'Descrição da agenda...'
+            'descricao': 'Descrição da agenda...',
+            'data_disponibilizacao': "2019-09-09",
+            'data_encerramento': "2019-09-10"
         }
         dados_errados = {'nome': 'Trabalho 2',
             'tipo': 'teste',
-            'descricao': 'Descrição da agenda...'
+            'descricao': 'Descrição da agenda...',
+            'data_disponibilizacao': "2019-09-09",
+            'data_encerramento': "2019-09-10"
         }
 
         agenda = Agenda.objects.create(**dados_errados)

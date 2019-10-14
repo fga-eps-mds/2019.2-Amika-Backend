@@ -23,7 +23,9 @@ class TestesAgenda(TestCase):
         Agenda.objects.create(
             nome="Serviço Social",
             descricao="Auxiliar a comunidade",
-            tipo="Grupo"
+            tipo="Grupo",
+            data_disponibilizacao ="2019-09-09",
+            data_encerramento ="2019-09-10"
         )
 
     def testa_atributos_do_objeto(self):
