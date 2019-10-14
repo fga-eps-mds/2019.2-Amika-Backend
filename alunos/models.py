@@ -4,9 +4,12 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import PROTECT, CASCADE
 
+from grupos.models import Grupo
+
 
 class Aluno(User):
     registro = models.OneToOneField("Registro", on_delete=CASCADE)
+    grupo = models.ForeignKey(Grupo, on_delete=PROTECT, null=True)
 
     class Meta:
         ordering = ['username']
