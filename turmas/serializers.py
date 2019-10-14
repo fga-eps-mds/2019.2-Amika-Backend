@@ -25,7 +25,7 @@ class TurmaPeriodoSerializer(serializers.ModelSerializer):
 class AgendaSerializer(serializers.ModelSerializer):
     class Meta: 
         model = Agenda
-        fields = ('id','nome', 'descricao', 'tipo')
+        fields = ('id','nome', 'descricao', 'tipo', 'data_disponibilizacao', 'data_encerramento')
 
     def __init__(self, *args, **kwargs):
         super(AgendaSerializer, self).__init__(*args, **kwargs)

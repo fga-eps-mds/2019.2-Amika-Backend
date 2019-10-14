@@ -26,6 +26,7 @@ class Agenda(models.Model):
     descricao = models.CharField(max_length = 500) 
     tipo = models.CharField(max_length=10, choices=TIPO_CHOICES)
     data_disponibilizacao = models.DateField(default=datetime.now)
+    data_encerramento = models.DateField()
 
 class Atividade(models.Model):
     data_entrega = models.DateField()
