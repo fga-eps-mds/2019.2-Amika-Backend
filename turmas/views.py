@@ -33,6 +33,7 @@ def gerencia_objetos(request, classe, serializer_class):
 		serializer = serializer_class(data = request.data)
 		if serializer.is_valid(raise_exception = True):
 			serializer.save()
+			return Response(serializer.data, status=status.HTTP_200_OK)
 		else:
 			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -43,8 +44,9 @@ def gerencia_objeto_pk(request, pk, classe, serializer_class):
 		serializer = serializer_class(objeto, partial = True, data = request.data)
 		if serializer.is_valid(raise_exception = True):
 			serializer.save()
+			return Response(serializer.data, status=status.HTTP_200_OK)
 		else:
-			Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 	if request.method == 'DELETE':
 		objeto.delete()
