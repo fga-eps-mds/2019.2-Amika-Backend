@@ -31,3 +31,8 @@ class AgendaSerializer(serializers.ModelSerializer):
         super(AgendaSerializer, self).__init__(*args, **kwargs)
         if kwargs:
             kwargs['data']['tipo'] = kwargs['data']['tipo'].capitalize()
+
+    def validate(self, data):
+        if data['data_disponibilizacao'] > data['data_encerramento']:
+            raise serializers.ValidationError({"error": "Data de disponibilização maior do que a de encerramento."})
+        return data
