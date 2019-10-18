@@ -7,9 +7,12 @@ from rest_framework.response import Response
 from alunos.models import Aluno
 from .models import Grupo
 from .serializers import GrupoSerializer
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAdminUser
 
 
 @api_view(['POST'])
+@permission_classes([IsAdminUser])
 def cria_grupo(request):
     if request.data:
         serializer = GrupoSerializer(data=request.data)
@@ -23,6 +26,7 @@ def cria_grupo(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAdminUser])
 def lista_grupos(request):
     queryset = Grupo.objects.all()
     serializer_class = GrupoSerializer(queryset, many=True)
@@ -30,6 +34,7 @@ def lista_grupos(request):
 
 
 @api_view(['GET', 'DELETE', 'PUT'])
+@permission_classes([IsAdminUser])
 def gerencia_grupo(request, pk):
     grupo = Grupo.objects.filter(pk=pk).first()
     if not grupo:

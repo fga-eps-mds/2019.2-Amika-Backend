@@ -1,13 +1,15 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Turma
 from .serializers import TurmaSerializer, TurmaPeriodoSerializer
 from django.http import JsonResponse
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAdminUser
 
 @api_view(['GET', 'POST'])
+@permission_classes([IsAdminUser])
 def gerencia_turmas(request):
 	if request.method == 'GET':
 		queryset = Turma.objects.all()
@@ -23,6 +25,7 @@ def gerencia_turmas(request):
 			return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'DELETE' , 'PUT'])
+@permission_classes([IsAdminUser])
 def gerencia_turma(request, pk):
 	turma = Turma.objects.filter(pk = pk).first()
 
