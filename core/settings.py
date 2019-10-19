@@ -42,9 +42,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'corsheaders',
-    'alunos',
-    'turmas',
-    'grupos',
+    'amika',
 ]
 
 MIDDLEWARE = [
