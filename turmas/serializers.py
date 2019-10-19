@@ -1,4 +1,4 @@
-from .models import Turma, Periodo
+from .models import Turma, Periodo, Agenda
 from rest_framework import serializers
 import datetime
 
@@ -21,3 +21,18 @@ class TurmaPeriodoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Turma
         fields = ('id','nome', 'ano', 'semestre')
+
+class AgendaSerializer(serializers.ModelSerializer):
+    class Meta: 
+        model = Agenda
+        fields = ('id','nome', 'descricao', 'tipo', 'data_disponibilizacao', 'data_encerramento')
+
+    def __init__(self, *args, **kwargs):
+        super(AgendaSerializer, self).__init__(*args, **kwargs)
+        if kwargs:
+            kwargs['data']['tipo'] = kwargs['data']['tipo'].capitalize()
+
+    def validate(self, data):
+        if data['data_disponibilizacao'] > data['data_encerramento']:
+            raise serializers.ValidationError({"error": "Data de disponibilização maior do que a de encerramento."})
+        return data

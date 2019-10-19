@@ -1,5 +1,5 @@
 from django.test import TestCase
-from turmas.models import Turma, Periodo
+from turmas.models import Turma, Periodo, Agenda
 
 class TestesPeriodo(TestCase):
     def setUp(self):
@@ -17,3 +17,18 @@ class TestesTurma(TestCase):
 
     def testa_str_do_objeto(self):
         self.assertEqual(str(Turma.objects.first()), "Felicidade 2019/2")
+
+class TestesAgenda(TestCase):
+    def setUp(self):
+        Agenda.objects.create(
+            nome="Serviço Social",
+            descricao="Auxiliar a comunidade",
+            tipo="Grupo",
+            data_disponibilizacao ="2019-09-09",
+            data_encerramento ="2019-09-10"
+        )
+
+    def testa_atributos_do_objeto(self):
+        self.assertEqual(str(Agenda.objects.first().nome), "Serviço Social")
+        self.assertEqual(str(Agenda.objects.first().descricao), "Auxiliar a comunidade")
+        self.assertEqual(str(Agenda.objects.first().tipo), "Grupo")
