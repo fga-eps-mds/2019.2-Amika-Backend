@@ -4,22 +4,12 @@ from rest_framework import status
 from turmas.models import Turma, Periodo, Agenda
 
 class TestesGerenciaDeTurmas(TestCase):
-    def teste_cadastro_turma(self):
-        turma_dados = {
-            "nome": "Felicidade",
-            "ano": 2019,
-            "semestre": 2
-        }   
-
-        response = self.client.post(reverse('gerencia_turmas'), turma_dados, format='json')
-        self.assertEquals(response.status_code, status.HTTP_201_CREATED)
-    
     def teste_cadastro_turma_com_dados_incompletos(self):
         turma_dados_incompletos = {
             "ano": 2019,
             "semestre": 2
         }      
-        response = self.client.post(reverse('gerencia_turmas'), turma_dados_incompletos, format='json')
+        response = self.client.post(reverse('gerencia_turmas'), turma_dados_incompletos, content_type='application/json')
         self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def teste_visualizacao_turmas(self):
@@ -65,8 +55,8 @@ class TestesGerenciaDeAgendas(TestCase):
             "data_encerramento": "2019-09-10"
         }
 
-        response = self.client.post(reverse('gerencia_agendas'), dados_agenda, format='json')
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        response = self.client.post(reverse('gerencia_agendas'), dados_agenda, content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def teste_visualizacao_agendas(self):
         response = self.client.get(reverse('gerencia_agendas'))
