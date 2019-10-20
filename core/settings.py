@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'amika',
-    'formulario_felicidade_autentica',
 ]
 
 MIDDLEWARE = [

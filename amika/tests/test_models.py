@@ -37,14 +37,15 @@ class TestesAluno(TestCase):
                 periodo=Periodo.objects.create(ano=2019, semestre=2)))
         self.assertEqual(str(aluno), "123456789 Nome Sobrenome")
 
+
 class TestesGrupo(TestCase):
     def testa_str_do_objeto(self):
         grupo = Grupo.objects.create(nome="Grupo 1")
         self.assertEqual(str(grupo), "Grupo 1")
 
+
 class TestesAgenda(TestCase):
     def testa_str_do_objeto(self):
-
         agenda = Agenda.objects.create(
             nome="Atividade 2",
             descricao="descricao agenda...",
@@ -52,3 +53,9 @@ class TestesAgenda(TestCase):
             data_disponibilizacao="2019-09-09",
             data_encerramento="2019-09-10")
         self.assertEqual(str(agenda), "Atividade 2 Individual 2019-09-09/2019-09-10")
+
+
+class TestesFormulario(TestCase):
+    def testa_str_do_objeto(self):
+        formulario = Formulario.objects.create(tipo="A", pontuacao="10.00")
+        self.assertEqual(str(formulario), "A 10.00")

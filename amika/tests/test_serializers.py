@@ -37,7 +37,6 @@ class TestesAlunoSerializer(TestCase):
         Grupo.objects.create(nome="Feliz")
 
     def testa_criacao_de_aluno(self):
-
         aluno_dados = {
             'username': '123456789',
             'first_name': "Nome",
@@ -59,7 +58,27 @@ class TestesAlunoSerializer(TestCase):
 
         alteracao = {
             'password': '123456',
-            'grupo': 'Feliz'
+            'grupo': 'Feliz',
+            'formulario': [{'tipo': 'A', 'pontuacao': 10}]
+        }
+
+        serializer = AlunoSerializer().update(aluno, alteracao)
+        self.assertTrue(isinstance(serializer, Aluno))
+
+    def testa_atualizacao_de_aluno_com_formulario_existente(self):
+        formulario = Formulario.objects.create(tipo='A', pontuacao=10.00)
+
+        aluno = Aluno.objects.create(
+            username='123456789',
+            first_name='Nome',
+            last_name='Sobrenome',
+            password='123',
+            registro=Registro.objects.first())
+        aluno.formulario.add(formulario)
+        aluno.save()
+
+        alteracao = {
+            'formulario': [{'tipo': 'A', 'pontuacao': 20.00}]
         }
 
         serializer = AlunoSerializer().update(aluno, alteracao)
@@ -83,7 +102,8 @@ class TestesAlunoSerializer(TestCase):
             'first_name': 'Nome',
             'last_name': 'Sobrenome',
             'password': '123',
-            'grupo': 'Feliz'
+            'grupo': 'Feliz',
+            'formulario': None
         }
         serializer = AlunoSerializer(data=aluno_dados)
         serializer.is_valid()

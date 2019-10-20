@@ -13,6 +13,7 @@ SERIALIZERS = {
     'Aluno': AlunoSerializer,
     'Grupo': GrupoSerializer,
     'Agenda': AgendaSerializer,
+    'Formulario': FormularioSerializer
 }
 
 
