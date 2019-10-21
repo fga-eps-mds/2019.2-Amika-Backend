@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'alunos',
     'turmas',
     'grupos',
+    'agendas',
 ]
 
 MIDDLEWARE = [
