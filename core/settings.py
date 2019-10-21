@@ -148,3 +148,5 @@ django_heroku.settings(locals())
 if DATABASES['default'].get('OPTIONS'):
     if DATABASES['default']['OPTIONS'].get('sslmode'):
         del DATABASES['default']['OPTIONS']['sslmode']
+
+MEDIA_ROOT = ['../agendas/arquivos']
