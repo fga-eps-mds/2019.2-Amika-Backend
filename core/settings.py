@@ -149,4 +149,5 @@ if DATABASES['default'].get('OPTIONS'):
     if DATABASES['default']['OPTIONS'].get('sslmode'):
         del DATABASES['default']['OPTIONS']['sslmode']
 
-MEDIA_ROOT = ['../agendas/arquivos']
+MEDIA_URL = '/arquivos/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'arquivos')
