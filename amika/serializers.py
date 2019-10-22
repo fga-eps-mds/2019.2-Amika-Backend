@@ -93,3 +93,15 @@ def ano():
 
 def semestre():
     return 1 if date.today().month <= 6 else 2
+
+class HumorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Humor
+        fields = '__all__'
+
+    def create(self, aluno, validated_data):
+        humor = Humor.objects.get_or_create(
+            humor_do_dia = validated_data['humor_do_dia'],
+            data = datetime.now(),
+            aluno = aluno
+        )
