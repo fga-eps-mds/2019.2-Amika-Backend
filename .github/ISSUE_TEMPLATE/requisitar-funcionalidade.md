@@ -24,3 +24,10 @@ assignees: ''
 - [ ] A issue possui descrição significativa.
 - [ ] A issue possui screenshots quando necessárias.
 - [ ] A issue possui labels.
+
+**Critérios de aceitação**
+- [ ] Os commits seguem a [política de commits do repositório](https://fga-eps-mds.github.io/2019.2-Amika-Wiki/#/docs/projeto/planogerencia).
+- [ ] As branches seguem a [política de branches do repositório](https://fga-eps-mds.github.io/2019.2-Amika-Wiki/#/docs/projeto/planogerencia).
+- [ ] Não há erros de linter.
+- [ ] A build está passando (travis, code climate).
+- [ ] Foram criadas rotas para serem consumidas no Frontend
