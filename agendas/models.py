@@ -5,4 +5,7 @@ from django.db.models import PROTECT, CASCADE
 class AgendaRealizar(models.Model):
     titulo = models.CharField(max_length=100)   
     texto = models.TextField()
-    anexo = models.FileField(upload_to='arquivos')
+    anexo = models.FileField()
+
+    def __str__(self):
+        return self.titulo
