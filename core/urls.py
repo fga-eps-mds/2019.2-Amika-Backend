@@ -6,12 +6,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('grupos.urls')),
-    path('', include('turmas.urls')),
-    path('', include('alunos.urls')),
-    path('', include('agendas.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path('login/', obtain_jwt_token),
+    path('', include('amika.urls'))
 ]
 
 if settings.DEBUG:
