@@ -39,24 +39,24 @@ def autentica_aluno(view):
     return wrapper
 
 urlpatterns = [
-    path('registro/', post, name='post_registro'),
-    path('registros/',get, name='get_registros'),
-    path('registro/<int:pk>/', rud, name='rud_registro'),
+    path('registro/', autentica_administrador(post), name='post_registro'),
+    path('registros/', autentica_administrador(get), name='get_registros'),
+    path('registro/<int:pk>/', autentica_administrador(rud), name='rud_registro'),
 
     path('aluno/', post, name='post_aluno'),
-    path('alunos/', get, name='get_alunos'),
-    path('aluno/<int:pk>/', rud, name='rud_aluno'),
+    path('alunos/', autentica_administrador(get), name='get_alunos'),
+    path('aluno/<int:pk>/', autentica_administrador(rud), name='rud_aluno'),
 
-    path('turma/', post, name='post_turma'),
-    path('turmas/', get, name='get_turmas'),
-    path('turma/<int:pk>', rud, name='rud_turma'),
+    path('turma/', autentica_administrador(post), name='post_turma'),
+    path('turmas/', autentica_administrador(get), name='get_turmas'),
+    path('turma/<int:pk>', autentica_administrador(rud), name='rud_turma'),
 
-    path('grupo/', post, name='post_grupo'),
-    path('grupos/', get, name='get_grupos'),
-    path('grupo/<int:pk>/', rud, name='rud_grupo'),
-    path('popula-grupo/', popula_grupos, name='popula_grupos'),
+    path('grupo/', autentica_administrador(post), name='post_grupo'),
+    path('grupos/', autentica_administrador(get), name='get_grupos'),
+    path('grupo/<int:pk>/', autentica_administrador(rud), name='rud_grupo'),
+    path('popula-grupo/', autentica_administrador(popula_grupos), name='popula_grupos'),
 
-    path('agenda/', post, name="post_agendas"),
-    path('agendas/', get, name="get_agendas"),
-    path('agenda/<int:pk>', rud, name="rud_agenda"),
+    path('agenda/', autentica_administrador(post), name="post_agendas"),
+    path('agendas/', autentica_administrador(get), name="get_agendas"),
+    path('agenda/<int:pk>', autentica_administrador(rud), name="rud_agenda"),
 ]
