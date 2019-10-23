@@ -68,8 +68,8 @@ class Aluno(User):
 
 class Humor(models.Model):
     humor_do_dia = models.IntegerField()
+    aluno = models.IntegerField()
     data = models.DateField(default=datetime.now)
-    aluno = models.ForeignKey(Aluno, on_delete=PROTECT)
 
     def __str__(self):
         return "{} {} {}".format(self.humor_do_dia, self.data, self.aluno)
