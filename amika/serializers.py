@@ -99,9 +99,11 @@ class HumorSerializer(serializers.ModelSerializer):
         model = Humor
         fields = '__all__'
 
-    def create(self, aluno, validated_data):
-        humor = Humor.objects.get_or_create(
+    def create(self, validated_data):
+        humor, created = Humor.objects.get_or_create(
             humor_do_dia = validated_data['humor_do_dia'],
-            data = datetime.now(),
-            aluno = aluno
+            aluno = validated_data['aluno'],
+            data = datetime.now()
         )
+
+        return humor
