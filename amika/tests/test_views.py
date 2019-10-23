@@ -28,6 +28,36 @@ def get_token(self):
         self.token = ""
         self.client.credentials(HTTP_AUTHORIZATION= self.token)
 
+class TeteAutenticacao(APITestCase):
+
+    def testa_autenticacao(self):
+        criar_usuario(self, 'usuario', 'senha')
+        criar_dados_usuario(self, 'usuario', 'senha')
+        get_token(self)
+        verification_url = reverse('verificar-chave')
+        resp = self.client.post(verification_url, {'token': self.token}, format='json')
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+
+    def testa_autenticacao_token_errado(self):
+        verification_url = reverse('verificar-chave')
+        resp = self.client.post(verification_url, {'token': 'token_errado'}, format='json')
+        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def testa_autenticacao_usuario_errado(self):
+        criar_usuario(self, 'usuario', 'senha')
+        criar_dados_usuario(self, 'usuario_errado', 'senha')
+        get_token(self)
+        verification_url = reverse('verificar-chave')
+        resp = self.client.post(verification_url, {'token': self.token}, format='json')
+        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def testa_autenticacao_senha_errada(self):
+        criar_dados_usuario(self, 'usuario', 'senha_errada')
+        get_token(self)
+        verification_url = reverse('verificar-chave')
+        resp = self.client.post(verification_url, {'token': self.token}, format='json')
+        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+
 class TesteGet(APITestCase):
     def setUp(self):
         criar_administrador(self, 'admin', 'senha_admin')
