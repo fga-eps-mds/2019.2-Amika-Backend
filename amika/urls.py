@@ -13,17 +13,15 @@ def autentica_administrador(view):
     @csrf_exempt
     def wrapper(request, *args, **kwargs):
         try:
-            print(request.headers['Authorization'])
             token = {'token': request.headers['Authorization']}
             valid = VerifyJSONWebTokenSerializer().validate(token)
             user = User.objects.get(username=valid['user'])
             if user.is_superuser:
                 return view(request, *args, **kwargs)
             else:
-                return JsonResponse({'error': 'Acesso permitido somente ao administrador'}, status=401)
+                return JsonResponse({'error': 'Acesso permitido somente ao administrador'}, status=403)
         except:
-            return JsonResponse({'error': 'Logue no sistema'}, status=401)
-        print(valid)
+            return JsonResponse({'error': 'Logue no sistema'}, status=403)
     return wrapper
 
 def autentica_aluno(view):
@@ -35,7 +33,7 @@ def autentica_aluno(view):
             user = User.objects.get(username=valid['user'])
             return view(request, *args, **kwargs)
         except:
-            return JsonResponse({'error': 'Logue no sistema'}, status=401)
+            return JsonResponse({'error': 'Logue no sistema'}, status=403)
     return wrapper
 
 urlpatterns = [
