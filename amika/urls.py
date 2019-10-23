@@ -23,4 +23,7 @@ urlpatterns = [
     path('agenda/', post, name="post_agendas"),
     path('agendas/', get, name="get_agendas"),
     path('agenda/<int:pk>', rud, name="rud_agenda"),
+
+    path('humor/', post, name="post_humor"),
+    path('humores/', get, name="get_humores"),
 ]

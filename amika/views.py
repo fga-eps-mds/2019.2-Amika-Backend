@@ -13,6 +13,7 @@ SERIALIZERS = {
     'Aluno': AlunoSerializer,
     'Grupo': GrupoSerializer,
     'Agenda': AgendaSerializer,
+    'Humor': HumorSerializer,
 }
 
 
@@ -37,6 +38,7 @@ def post(request):
 
     if param == 'Registro':
         serializer = SERIALIZERS[param](data=request.data, many=True)
+
     else:
         serializer = SERIALIZERS[param](data=request.data)
 
