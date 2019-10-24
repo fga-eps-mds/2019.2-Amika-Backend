@@ -1,9 +1,13 @@
- import random
+import random
 
 from django.apps import apps
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.parsers import FileUploadParser
+from rest_framework.views import APIView
+from django.http import JsonResponse
+from .models import AgendaRealizar
 
 from .serializers import *
 
@@ -13,8 +17,8 @@ SERIALIZERS = {
     'Aluno': AlunoSerializer,
     'Grupo': GrupoSerializer,
     'Agenda': AgendaSerializer,
+    'AgendaRealizar': AgendaRealizarSerializer,
 }
-
 
 def serializer_status(serializer, success_status):
     if serializer.is_valid():
@@ -110,15 +114,17 @@ def popula_grupos(request):
 
     return Response(status=status.HTTP_200_OK)
 
-def enviar_anexo(request):
-    if request.method == "POST":
-        form = DocumentoForm(request.POST, request.FILES)
-        form.save()
-        return redirect('listar_anexos')
-    else: 
-        form = DocumentoForm()
-    return render(request, 'enviarArquivo.html', {'form': form})
+class GerenciarAnexosView(APIView):
+    def post(self, request, *args, **kwargs):
+        """if request.method == 'GET':
+            queryset = AgendaRealizar.objects.all()
+            serializer_class = AgendaRealizarSerializer(queryset, many=True)
+            return Response(serializer_class.data, status=status.HTTP_200_OK)"""
 
-def listar_anexos(request):
-    anexos = AgendaRealizar.objects.all()
-    return render(request, 'listar_anexos.html', {'anexos': anexos})
+        serializer = AgendaRealizarSerializer(data=request.data)
+        print("Dados {}".format(request.data))
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else: 
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
