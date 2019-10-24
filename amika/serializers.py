@@ -86,10 +86,15 @@ class AgendaSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"error": "Data de disponibilização maior do que a de encerramento."})
         return data
 
-
 def ano():
     return date.today().year
 
 
 def semestre():
     return 1 if date.today().month <= 6 else 2
+
+class AgendaRealizarSerializer(serializers.ModelSerializer):
+    agenda_relacionada = serializers.ReadOnlyField(source='agenda.nome')
+    class Meta:
+        model = AgendaRealizar
+        fields = '__all__'
