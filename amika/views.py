@@ -52,6 +52,19 @@ def get(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+@api_view(['GET'])
+def perfil_usuario(request, pk):
+    param = request.path.split('/')[1].title()
+    model = apps.get_model("amika", param)
+    objeto = model.objects.filter(pk=pk).first()
+    if not objeto:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.user.is_superuser or request.user.username == objeto.username:
+        response = read(param, objeto)
+        return response
+    else:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+
 @api_view(['GET', 'PUT', 'DELETE'])
 def rud(request, pk):
     param = request.path.split('/')[1].title()
