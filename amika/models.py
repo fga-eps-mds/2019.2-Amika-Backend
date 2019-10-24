@@ -67,9 +67,6 @@ class Aluno(User):
         return "{} {}".format(self.username, self.get_full_name())
 
 class AgendaRealizar(models.Model):
-    titulo = models.CharField(max_length=100)   
-    texto = models.TextField()
-    anexo = models.FileField()
-
-    def __str__(self):
-        return self.titulo
+    texto = models.TextField(blank=False, null=False)
+    anexo = models.FileField(null=False)
+    agenda = models.ForeignKey(Agenda, related_name='agenda_relacionada', on_delete=models.SET_NULL, null=True)
