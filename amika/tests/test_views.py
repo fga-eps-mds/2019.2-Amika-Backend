@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 
 from amika.models import *
 
-def criar_usuario(self, username, password):
+def criar_aluno(self, username, password):
     self.user = User.objects.create_user(username=username, email='', password=password)
 
 def criar_administrador(self, username, password):
@@ -31,7 +31,7 @@ def get_token(self):
 class TeteAutenticacao(APITestCase):
 
     def testa_autenticacao(self):
-        criar_usuario(self, 'usuario', 'senha')
+        criar_aluno(self, 'usuario', 'senha')
         criar_dados_usuario(self, 'usuario', 'senha')
         get_token(self)
         verification_url = reverse('verificar-chave')
@@ -44,7 +44,7 @@ class TeteAutenticacao(APITestCase):
         self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
 
     def testa_autenticacao_usuario_errado(self):
-        criar_usuario(self, 'usuario', 'senha')
+        criar_aluno(self, 'usuario', 'senha')
         criar_dados_usuario(self, 'usuario_errado', 'senha')
         get_token(self)
         verification_url = reverse('verificar-chave')
@@ -57,6 +57,17 @@ class TeteAutenticacao(APITestCase):
         verification_url = reverse('verificar-chave')
         resp = self.client.post(verification_url, {'token': self.token}, format='json')
         self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def testa_sem_autenticacao(self):
+        response = self.client.get(reverse('get_registros'))
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def testa_chave_sem_permissao(self):
+        criar_aluno(self, 'aluno', 'senha_aluno')
+        criar_dados_usuario(self, 'aluno', 'senha_aluno')
+        get_token(self)
+        response = self.client.get(reverse('get_registros'), {'token': self.token}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 class TesteGet(APITestCase):
     def setUp(self):
