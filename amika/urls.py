@@ -1,4 +1,6 @@
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 
 from .views import *
 
@@ -24,7 +26,8 @@ urlpatterns = [
     path('agendas/', get, name="get_agendas"),
     path('agenda/<int:pk>', rud, name="rud_agenda"),
 
-    path('anexo', enviar_anexo, name='enviar_anexo'),
-    path('anexos', listar_anexos, name='listar_anexos')
-
+    path('enviar_anexo/', GerenciarAnexosView.as_view(), name='enviar_anexo'),
 ]
+
+if settings.DEBUG:
+  urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
