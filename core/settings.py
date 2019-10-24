@@ -116,6 +116,8 @@ REST_FRAMEWORK = {
 
 JWT_AUTH = {
     'JWT_VERIFY_EXPIRATION': False,
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'amika.utils.jwt_response_payload_handler',
+    'JWT_PAYLOAD_HANDLER': 'amika.utils.jwt_payload_handler',
 }
 
 # Internationalization
