@@ -103,7 +103,7 @@ class HumorSerializer(serializers.ModelSerializer):
         humor, created = Humor.objects.get_or_create(
             humor_do_dia = validated_data['humor_do_dia'],
             aluno = validated_data['aluno'],
-            data = datetime.now()
+            data = datetime.today()
         )
 
         return humor
