@@ -94,7 +94,22 @@ def semestre():
     return 1 if date.today().month <= 6 else 2
 
 class AgendaRealizarSerializer(serializers.ModelSerializer):
-    agenda_relacionada = serializers.ReadOnlyField(source='agenda.nome')
+    agenda_id = serializers.CharField(source='agenda.id')
+    agenda_nome = serializers.ReadOnlyField(source='agenda.nome')
+    agenda_descricao = serializers.ReadOnlyField(source='agenda.descricao')
+    agenda_tipo = serializers.ReadOnlyField(source='agenda.tipo')
+    agenda_data_disponibilizacao = serializers.ReadOnlyField(source='agenda.data_disponibilizacao')
+    agenda_data_encerramento = serializers.ReadOnlyField(source='agenda.data_encerramento')
+
     class Meta:
         model = AgendaRealizar
-        fields = '__all__'
+        fields = ['id', 'texto', 'anexo', 'agenda_id', 'agenda_descricao', 
+                    'agenda_nome', 'agenda_tipo', 'agenda_data_disponibilizacao', 
+                    'agenda_data_encerramento'
+                ]
+
+    def create(self, validated_data):
+        return AgendaRealizar.objects.create(
+            texto=validated_data['texto'],
+            anexo=validated_data['anexo'],
+            agenda=Agenda.objects.get(pk=validated_data['agenda']['id']))
