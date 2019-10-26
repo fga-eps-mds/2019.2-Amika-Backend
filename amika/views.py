@@ -7,8 +7,6 @@ from rest_framework.response import Response
 from rest_framework.parsers import FileUploadParser
 from rest_framework.views import APIView
 from django.http import JsonResponse
-from .models import AgendaRealizar
-
 from .serializers import *
 
 SERIALIZERS = {
@@ -114,13 +112,17 @@ def popula_grupos(request):
 
     return Response(status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+def get_anexos(request):
+    if request.method == 'GET':
+        data_atual = date.today()
+        queryset = Agenda.objects.filter(data_disponibilizacao__lte=data_atual, data_encerramento__gte=data_atual)
+        serializer_class = AgendaSerializer(queryset, many=True)
+        print(serializer_class.data)
+        return Response(serializer_class.data, status=status.HTTP_200_OK)
+
 class GerenciarAnexosView(APIView):
     def post(self, request, *args, **kwargs):
-        """if request.method == 'GET':
-            queryset = AgendaRealizar.objects.all()
-            serializer_class = AgendaRealizarSerializer(queryset, many=True)
-            return Response(serializer_class.data, status=status.HTTP_200_OK)"""
-
         serializer = AgendaRealizarSerializer(data=request.data)
         print("Dados {}".format(request.data))
         if serializer.is_valid():
