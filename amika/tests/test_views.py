@@ -6,17 +6,33 @@ from django.contrib.auth.models import User
 
 from amika.models import *
 
-def criar_aluno(self, username, password):
-    self.user = User.objects.create_user(username=username, email='', password=password)
+def criar_aluno(self, username, password, turma, periodo):
+    
+    self.user = Aluno.objects.create(username=username, 
+                                    first_name='Nome', last_name="Sobrenome",
+                                        registro=Registro.objects.create(
+                                                    matricula=username, turma=turma, 
+                                                    periodo=periodo
+                                                )
+                                    )
+    self.user.set_password(password)
+    self.user.save()
 
 def criar_administrador(self, username, password):
     self.user = User.objects.create_user(username=username, email='', password=password, is_superuser=True)
 
 def criar_dados_usuario(self, username, password):
     self.dados_usuario = {
-        'username': username,
-        'password': password
+        "username": username,
+        "password": password
     }
+
+def criar_turma(descricao):
+    return Turma.objects.create(descricao=descricao)
+
+
+def criar_periodo(ano, semestre):
+    return Periodo.objects.create(ano=ano, semestre=semestre)
 
 def get_token(self):
     self.url = reverse('login')
@@ -31,8 +47,10 @@ def get_token(self):
 class TeteAutenticacao(APITestCase):
 
     def testa_autenticacao(self):
-        criar_aluno(self, 'usuario', 'senha')
-        criar_dados_usuario(self, 'usuario', 'senha')
+        periodo = criar_periodo(2020,2)
+        turma = criar_turma('B')
+        criar_aluno(self, '130126721', 'senha', turma, periodo)
+        criar_dados_usuario(self, '130126721', 'senha')
         get_token(self)
         verification_url = reverse('verificar-chave')
         resp = self.client.post(verification_url, {'token': self.token}, format='json')
@@ -44,15 +62,17 @@ class TeteAutenticacao(APITestCase):
         self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
 
     def testa_autenticacao_usuario_errado(self):
-        criar_aluno(self, 'usuario', 'senha')
-        criar_dados_usuario(self, 'usuario_errado', 'senha')
+        periodo = criar_periodo(2020,2)
+        turma = criar_turma('B')
+        criar_aluno(self, '130126721', 'senha', turma, periodo)
+        criar_dados_usuario(self, '130129348', 'senha')
         get_token(self)
         verification_url = reverse('verificar-chave')
         resp = self.client.post(verification_url, {'token': self.token}, format='json')
         self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
 
     def testa_autenticacao_senha_errada(self):
-        criar_dados_usuario(self, 'usuario', 'senha_errada')
+        criar_dados_usuario(self, '130126721', 'senha_errada')
         get_token(self)
         verification_url = reverse('verificar-chave')
         resp = self.client.post(verification_url, {'token': self.token}, format='json')
@@ -63,7 +83,9 @@ class TeteAutenticacao(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def testa_chave_sem_permissao(self):
-        criar_aluno(self, 'aluno', 'senha_aluno')
+        periodo = criar_periodo(2020,2)
+        turma = criar_turma('B')
+        criar_aluno(self, 'aluno', 'senha_aluno', turma, periodo)
         criar_dados_usuario(self, 'aluno', 'senha_aluno')
         get_token(self)
         response = self.client.get(reverse('get_registros'), {'token': self.token}, format='json')
@@ -71,8 +93,8 @@ class TeteAutenticacao(APITestCase):
 
 class TesteGet(APITestCase):
     def setUp(self):
-        criar_administrador(self, 'admin', 'senha_admin')
-        criar_dados_usuario(self, 'admin', 'senha_admin')
+        criar_administrador(self, 'admin', 'senha')
+        criar_dados_usuario(self, 'admin', 'senha')
         get_token(self)
 
     def testa_retorna_objetos(self):
@@ -92,6 +114,16 @@ class TesteGet(APITestCase):
                 registro=Registro.objects.create(matricula=str(i), turma=turma, periodo=periodo))
 
         response = self.client.get(reverse('popula_grupos'))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+    def testa_perfil_aluno(self):
+        periodo = criar_periodo(2020,2)
+        turma = criar_turma('B')
+        criar_aluno(self, "123456789", "senha", turma, periodo)
+        criar_dados_usuario(self, '123456789', 'senha')
+        get_token(self)
+        response = self.client.get(reverse('perfil_usuario', kwargs={'pk':self.user.id}), {'token': self.token}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
