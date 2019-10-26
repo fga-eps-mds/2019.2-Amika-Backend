@@ -87,7 +87,7 @@ Este repositório foi desenvovido com o framework [Django](https://www.djangopro
   docker rm backend
   ```
 
-  #### Django(Comandos executados dentro do container)
+  #### Django (Comandos executados dentro do container)
 
   Criar um novo app
   ```bash
@@ -102,6 +102,11 @@ Este repositório foi desenvovido com o framework [Django](https://www.djangopro
   Realiza as migrações
   ```
   python3 manage.py migrate
+  ```
+
+  Popular a base de dados
+  ```
+  python3 manage.py loaddata seeds.json
   ```
 
   Roda os testes
