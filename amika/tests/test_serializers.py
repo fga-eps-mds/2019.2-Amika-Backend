@@ -1,4 +1,5 @@
 from django.test import TestCase
+import unittest
 
 from amika.serializers import *
 
@@ -130,3 +131,14 @@ class TestesHumor(TestCase):
 
         serializer = HumorSerializer().create(humor_do_dia)
         self.assertTrue(isinstance(serializer, Humor))
+
+    def testa_raises_validation_error(self):
+
+        humor_do_dia = {
+            "humor_do_dia": "3",
+            "aluno": "2"
+        }
+        serializer = HumorSerializer().create(humor_do_dia)
+
+        if Humor.objects.filter(data = serializer.data, aluno = serializer.aluno):
+            with self.assertRaises(serializers.ValidationError): HumorSerializer().create(humor_do_dia)
