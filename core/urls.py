@@ -7,6 +7,5 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('login/', obtain_jwt_token, name='login'),
     path('verificar-chave/', verify_jwt_token, name='verificar-chave'),
-    path('', include('amika.urls'))
     path('', include('amika.urls')),
 ]
