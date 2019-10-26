@@ -116,3 +116,17 @@ class TestesAgendaSerializer(TestCase):
         serializer = AgendaSerializer(data=dados_agenda)
         serializer.is_valid()
         self.assertEqual(serializer.errors['error'][0], "Data de disponibilização maior do que a de encerramento.")
+
+
+class TestesHumor(TestCase):
+
+    def testa_criacao_de_humor_do_dia(self):
+
+        humor_do_dia = {
+            "humor_do_dia": "3",
+            "aluno": "2",
+            "data": "2019-10-10"
+        }
+
+        serializer = HumorSerializer().create(humor_do_dia)
+        self.assertTrue(isinstance(serializer, Humor))
