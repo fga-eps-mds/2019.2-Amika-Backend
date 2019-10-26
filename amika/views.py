@@ -59,7 +59,7 @@ def perfil_usuario(request, pk):
     objeto = model.objects.filter(pk=pk).first()
     if not objeto:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    if request.user.is_superuser or request.user.username == objeto.username:
+    if request.usuario.is_superuser or request.usuario.username == objeto.username:
         response = read(param, objeto)
         return response
     else:
