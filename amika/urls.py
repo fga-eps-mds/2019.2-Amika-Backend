@@ -27,7 +27,8 @@ urlpatterns = [
     path('agenda/<int:pk>', rud, name="rud_agenda"),
 
     path('enviar_anexo/', GerenciarAnexosView.as_view(), name='enviar_anexo'),
-    path('obter_anexos/', get_anexos, name='obter_tarefas')
+    path('obter_nao_respondidas/', get_nao_respondidas, name='obter_nao_respondidas'),
+    path('obter_respondidas/', get_respondidas, name="obter_respondidas")
 ]
 
 if settings.DEBUG:

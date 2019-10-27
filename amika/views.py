@@ -8,6 +8,7 @@ from rest_framework.parsers import FileUploadParser
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from .serializers import *
+from .models import AgendaRealizar
 
 SERIALIZERS = {
     'Turma': TurmaSerializer,
@@ -113,11 +114,19 @@ def popula_grupos(request):
     return Response(status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-def get_anexos(request):
+def get_nao_respondidas(request):
     if request.method == 'GET':
         data_atual = date.today()
         queryset = Agenda.objects.filter(data_disponibilizacao__lte=data_atual, data_encerramento__gte=data_atual)
         serializer_class = AgendaSerializer(queryset, many=True)
+        print(serializer_class.data)
+        return Response(serializer_class.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def get_respondidas(request):
+    if request.method == 'GET':
+        queryset = AgendaRealizar.objects.filter()
+        serializer_class = AgendaRealizarSerializer(queryset, many=True)
         print(serializer_class.data)
         return Response(serializer_class.data, status=status.HTTP_200_OK)
 
