@@ -55,6 +55,17 @@ class TestesAgenda(TestCase):
         self.assertEqual(str(agenda), "Atividade 2 Individual 2019-09-09/2019-09-10")
 
 
+class TestesHumor(TestCase):
+    def testa_str_do_objeto(self):
+
+        humor_do_dia = Humor.objects.create(
+            humor_do_dia = 2,
+            aluno = 3,
+            data = "2019-10-10"
+        )
+        self.assertEquals(str(humor_do_dia), "2 2019-10-10 3")
+
+
 class TestesFormulario(TestCase):
     def testa_str_do_objeto(self):
         formulario = Formulario.objects.create(tipo="A", pontuacao="10.00")

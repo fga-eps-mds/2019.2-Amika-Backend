@@ -9,8 +9,8 @@ def autentica_administrador(view):
         try:
             token = {'token': request.headers['Authorization']}
             valid = VerifyJSONWebTokenSerializer().validate(token)
-            user = User.objects.get(username=valid['user'])
-            if user.is_superuser:
+            request.usuario = User.objects.get(username=valid['user'])
+            if request.usuario.is_superuser:
                 return view(request, *args, **kwargs)
             else:
                 return JsonResponse({'error': 'Acesso permitido somente ao administrador'}, status=403)
@@ -24,7 +24,7 @@ def autentica_aluno(view):
         try:
             token = {'token': request.headers['Authorization']}
             valid = VerifyJSONWebTokenSerializer().validate(token)
-            user = User.objects.get(username=valid['user'])
+            request.usuario = User.objects.get(username=valid['user'])
             return view(request, *args, **kwargs)
         except:
             return JsonResponse({'error': 'Logue no sistema'}, status=403)

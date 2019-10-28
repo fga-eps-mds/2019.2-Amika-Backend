@@ -18,6 +18,7 @@ urlpatterns = [
     path('aluno/', post, name='post_aluno'),
     path('alunos/', autentica_administrador(get), name='get_alunos'),
     path('aluno/<int:pk>/', autentica_administrador(rud), name='rud_aluno'),
+    path('aluno/perfil/<int:pk>/', autentica_aluno(perfil_usuario), name='perfil_usuario'),
 
     path('turma/', autentica_administrador(post), name='post_turma'),
     path('turmas/', autentica_administrador(get), name='get_turmas'),
@@ -31,4 +32,7 @@ urlpatterns = [
     path('agenda/', autentica_administrador(post), name="post_agendas"),
     path('agendas/', autentica_administrador(get), name="get_agendas"),
     path('agenda/<int:pk>', autentica_administrador(rud), name="rud_agenda"),
+
+    path('humor/', post, name="post_humor"),
+    path('humors/', get, name="get_humors"),
 ]
