@@ -111,3 +111,24 @@ class HumorSerializer(serializers.ModelSerializer):
             return humor
         else:
             raise serializers.ValidationError({"error": "Você já adicionou seu humor hoje!"})
+
+class MaterialSerializer(serializers.ModelSerializer):
+    material_nome = serializers.ReadOnlyField(source='material.nome')
+    material_descricao = serializers.ReadOnlyField(source='material.descricao')
+    material_data = serializers.ReadOnlyField(source='material.data')
+    material_arquivo = serializers.ReadOnlyField(source='material.arquivo')
+
+    class Meta:
+        model = Material
+        fields = '__all__'
+
+    def create(self, validated_data):
+        material = Material.objects.get_or_create(
+            nome=validated_data['nome'],
+            arquivo=validated_data['arquivo'],
+            data=validated_data['data'],
+            descricao=validated_data['descricao']
+        )
+
+        return material
+    
