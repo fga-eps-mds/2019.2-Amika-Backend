@@ -1,5 +1,4 @@
 from datetime import datetime, date
-
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
@@ -73,3 +72,14 @@ class Humor(models.Model):
 
     def __str__(self):
         return "{} {} {}".format(self.humor_do_dia, self.data, self.aluno)
+
+
+class Material(models.Model):
+    nome = models.CharField()
+    arquivo= models.FileField()
+    data = models.DateField(default=datetime.now)
+    descricao = models.CharField()
+
+
+    def __str__(self):
+        return "{} {} {} {}".format(self.nome, self.arquivo, self.data, self.descricao)
