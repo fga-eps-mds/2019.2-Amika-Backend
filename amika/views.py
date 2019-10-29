@@ -14,7 +14,8 @@ SERIALIZERS = {
     'Grupo': GrupoSerializer,
     'Agenda': AgendaSerializer,
     'Humor': HumorSerializer,
-    'Material' : MaterialSerializer,
+    'Aula': AulaSerializer,
+    'Material': MaterialSerializer,
 }
 
 
@@ -49,6 +50,7 @@ def post(request):
 @api_view(['GET'])
 def get(request):
     param = request.path.split('/')[1].title()[:-1]
+    param = 'Material' if param == 'Materiai' else param
     model = apps.get_model("amika", param)
     objetos = model.objects.all()
     serializer = SERIALIZERS[param](objetos, many=True)
@@ -67,6 +69,7 @@ def perfil_usuario(request, pk):
         return response
     else:
         return Response(status=status.HTTP_403_FORBIDDEN)
+
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def rud(request, pk):
