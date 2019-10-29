@@ -94,6 +94,7 @@ def ano():
 def semestre():
     return 1 if date.today().month <= 6 else 2
 
+
 class HumorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Humor
@@ -102,33 +103,32 @@ class HumorSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
 
         data = date.today()
-        if not Humor.objects.filter(data = data, aluno = validated_data['aluno']):
+        if not Humor.objects.filter(data=data, aluno=validated_data['aluno']):
             humor = Humor.objects.create(
-                humor_do_dia = validated_data['humor_do_dia'],
-                aluno = validated_data['aluno'],
-                data = date.today()
+                humor_do_dia=validated_data['humor_do_dia'],
+                aluno=validated_data['aluno'],
+                data=date.today()
             )
             return humor
         else:
             raise serializers.ValidationError({"error": "Você já adicionou seu humor hoje!"})
 
-class MaterialSerializer(serializers.ModelSerializer):
-    material_nome = serializers.ReadOnlyField(source='material.nome')
-    material_descricao = serializers.ReadOnlyField(source='material.descricao')
-    material_data = serializers.ReadOnlyField(source='material.data')
-    material_arquivo = serializers.ReadOnlyField(source='material.arquivo')
 
+class AulaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Material
+        model = Aula
         fields = '__all__'
 
     def create(self, validated_data):
-        material = Material.objects.get_or_create(
-            nome=validated_data['nome'],
-            arquivo=validated_data['arquivo'],
-            data=validated_data['data'],
-            descricao=validated_data['descricao']
-        )
+        aula, _ = Aula.objects.get_or_create(data=validated_data['data'])
+        aula.tema = validated_data['tema']
+        aula.descricao = validated_data.get('descricao')
+        aula.save()
 
-        return material
-    
+        return aula
+
+
+class MaterialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Material
+        fields = '__all__'

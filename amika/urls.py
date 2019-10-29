@@ -33,10 +33,14 @@ urlpatterns = [
     path('agendas/', autentica_administrador(get), name="get_agendas"),
     path('agenda/<int:pk>', autentica_administrador(rud), name="rud_agenda"),
 
-    path('material/', autentica_administrador(post), name="post_material"),
-    path('materiais/', autentica_administrador(get), name="get_materiais"),
-    path('material/<int:pk>', autentica_administrador(rud), name="rud_material"),
-
     path('humor/', post, name="post_humor"),
     path('humors/', get, name="get_humors"),
+
+    path('aula/', post, name="post_aula"),
+    path('aulas/', get, name="get_aulas"),
+    path('aula/<int:pk>', rud, name="rud_aula"),
+
+    path('material/', post, name="post_material"),
+    path('materiais/', get, name="get_materiais"),
+    path('material/<int:pk>', rud, name="rud_material"),
 ]
