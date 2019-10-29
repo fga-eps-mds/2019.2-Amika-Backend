@@ -75,10 +75,10 @@ class Humor(models.Model):
 
 
 class Material(models.Model):
-    nome = models.CharField()
-    arquivo= models.FileField()
+    nome = models.CharField(max_length=100)
+    arquivo= models.FileField(null=False)
     data = models.DateField(default=datetime.now)
-    descricao = models.CharField()
+    descricao = models.CharField(max_length=240)
 
 
     def __str__(self):
