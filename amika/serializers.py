@@ -94,7 +94,7 @@ def semestre():
     return 1 if date.today().month <= 6 else 2
 
 class AgendaRealizarSerializer(serializers.ModelSerializer):
-    #agenda_id = serializers.CharField(source='agenda.id')
+    agenda_id = serializers.CharField(source='agenda.id')
     agenda_nome = serializers.ReadOnlyField(source='agenda.nome')
     agenda_descricao = serializers.ReadOnlyField(source='agenda.descricao')
     agenda_tipo = serializers.ReadOnlyField(source='agenda.tipo')

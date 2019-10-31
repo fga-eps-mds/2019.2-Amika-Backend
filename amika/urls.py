@@ -39,13 +39,10 @@ urlpatterns = [
     path('humor/', post, name="post_humor"),
     path('humors/', get, name="get_humors"),
 
-    path('agenda/', post, name="post_agendas"),
-    path('agendas/', get, name="get_agendas"),
-    path('agenda/<int:pk>', rud, name="rud_agenda"),
-
     path('enviar_anexo/', GerenciarAnexosView.as_view(), name='enviar_anexo'),
     path('obter_nao_respondidas/', get_nao_respondidas, name='obter_nao_respondidas'),
     path('obter_respondidas/', get_respondidas, name="obter_respondidas"),
+    path('obter_agendas/', get_agendas, name="obter_agendas"),
     
     path('material/', post, name="post_material"),
     path('materiais/', get, name="get_materiais"),
