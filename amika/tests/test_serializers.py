@@ -140,15 +140,3 @@ class TestesHumor(TestCase):
         serializer = HumorSerializer().create(humor_do_dia)
         if Humor.objects.filter(data=serializer.data, aluno=serializer.aluno):
             with self.assertRaises(serializers.ValidationError): HumorSerializer().create(humor_do_dia)
-
-
-class TestesAula(TestCase):
-    def testa_criacao_de_aula(self):
-        aula = {
-            "tema": "Ansiedade",
-            "descricao": "Abordagem sobre a ansiedade e seus males.",
-            "data": "2019-10-01"
-        }
-
-        serializer = AulaSerializer().create(aula)
-        self.assertTrue(isinstance(serializer, Aula))

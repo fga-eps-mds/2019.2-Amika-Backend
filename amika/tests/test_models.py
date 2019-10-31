@@ -63,13 +63,3 @@ class TestesHumor(TestCase):
             data="2019-10-10"
         )
         self.assertEquals(str(humor_do_dia), "2 2019-10-10 3")
-
-
-class TestesAula(TestCase):
-    def testa_str_do_objeto(self):
-        aula = Aula.objects.create(
-            tema="Ansiedade",
-            descricao="Abordagem sobre a ansiedade e seus males.",
-            data="2019-10-01"
-        )
-        self.assertEquals(str(aula), "Ansiedade 2019-10-01")
