@@ -49,24 +49,17 @@ def post(request):
 @api_view(['GET'])
 def get(request):
     param = request.path.split('/')[1].title()[:-1]
-    model = apps.get_model("amika", param)
-    objetos = model.objects.all()
-    serializer = SERIALIZERS[param](objetos, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-@api_view(['GET'])
-def perfil_usuario(request, pk):
-    param = request.path.split('/')[1].title()
-    model = apps.get_model("amika", param)
-    objeto = model.objects.filter(pk=pk).first()
-    if not objeto:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    if request.usuario.is_superuser or request.usuario.username == objeto.username:
-        response = read(param, objeto)
-        return response
+    if param == 'Aluno' and not request.usuario.is_superuser:
+        response = Response(status=status.HTTP_403_FORBIDDEN)
     else:
-        return Response(status=status.HTTP_403_FORBIDDEN)
+        model = apps.get_model("amika", param)
+        objetos = model.objects.all()
+        serializer = SERIALIZERS[param](objetos, many=True)
+        response = Response(serializer.data, status=status.HTTP_200_OK)
+
+    return response
+
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def rud(request, pk):
@@ -77,11 +70,20 @@ def rud(request, pk):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        response = read(param, objeto)
+        if param == 'Aluno' and not (request.usuario.is_superuser or request.usuario.username == objeto.username):
+            response = Response(status=status.HTTP_403_FORBIDDEN)
+        else:
+            response = read(param, objeto)
     elif request.method == 'PUT':
-        response = put(param, objeto, request.data)
+        if param == 'Aluno' and not (request.usuario.is_superuser or request.usuario.username == objeto.username):
+            response = Response(status=status.HTTP_403_FORBIDDEN)
+        else:
+            response = put(param, objeto, request.data)
     elif request.method == 'DELETE':
-        response = delete(objeto)
+        if param == 'Aluno' and not request.usuario.is_superuser:
+            response = Response(status=status.HTTP_403_FORBIDDEN)
+        else:
+            response = delete(objeto)
 
     return response
 
