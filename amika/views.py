@@ -14,7 +14,6 @@ SERIALIZERS = {
     'Grupo': GrupoSerializer,
     'Agenda': AgendaSerializer,
     'Humor': HumorSerializer,
-    'Aula': AulaSerializer,
     'Material': MaterialSerializer,
 }
 

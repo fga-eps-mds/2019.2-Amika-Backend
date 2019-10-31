@@ -75,18 +75,8 @@ class Humor(models.Model):
         return "{} {} {}".format(self.humor_do_dia, self.data, self.aluno)
 
 
-class Aula(models.Model):
-    tema = models.CharField(max_length=100)
-    descricao = models.CharField(max_length=240, null=True, blank=True)
-    data = models.DateField(unique=True)
-
-    def __str__(self):
-        return "{} {}".format(self.tema, self.data)
-
-
 class Material(models.Model):
     arquivo = models.FileField(upload_to='materiais/')
-    aula = models.ForeignKey(Aula, on_delete=PROTECT)
 
     def __str__(self):
         return self.arquivo.name

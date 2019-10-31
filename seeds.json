@@ -7529,59 +7529,5 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
-    "model": "amika.aula",
-    "pk": 1,
-    "fields": {
-      "tema": "Ansiedade",
-      "descricao": "Abordagem sobre a ansiedade e seus males.",
-      "data": "2019-10-01"
-    }
-  },
-  {
-    "model": "amika.aula",
-    "pk": 2,
-    "fields": {
-      "tema": "Ansiedade",
-      "descricao": "Abordagem sobre bens promovidos por uma ansiedade controlada.",
-      "data": "2019-10-03"
-    }
-  },
-  {
-    "model": "amika.aula",
-    "pk": 3,
-    "fields": {
-      "tema": "Vergonha",
-      "descricao": "Como a vergonha pode atrapalhar o convívio social.",
-      "data": "2019-10-08"
-    }
-  },
-  {
-    "model": "amika.aula",
-    "pk": 4,
-    "fields": {
-      "tema": "Vergonha",
-      "descricao": "Bom senso causado pela vergonha natual.",
-      "data": "2019-10-10"
-    }
-  },
-  {
-    "model": "amika.aula",
-    "pk": 5,
-    "fields": {
-      "tema": "Depressão",
-      "descricao": "Possíveis causas e motívos.",
-      "data": "2019-10-15"
-    }
-  },
-  {
-    "model": "amika.aula",
-    "pk": 6,
-    "fields": {
-      "tema": "Depressão",
-      "descricao": "Suicídio não é a solução",
-      "data": "2019-10-17"
-    }
   }
 ]

@@ -114,20 +114,6 @@ class HumorSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"error": "Você já adicionou seu humor hoje!"})
 
 
-class AulaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Aula
-        fields = '__all__'
-
-    def create(self, validated_data):
-        aula, _ = Aula.objects.get_or_create(data=validated_data['data'])
-        aula.tema = validated_data['tema']
-        aula.descricao = validated_data.get('descricao')
-        aula.save()
-
-        return aula
-
-
 class MaterialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Material
