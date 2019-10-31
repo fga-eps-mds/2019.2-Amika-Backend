@@ -35,4 +35,8 @@ urlpatterns = [
 
     path('humor/', post, name="post_humor"),
     path('humors/', get, name="get_humors"),
+
+    path('material/', post, name="post_material"),
+    path('materiais/', get, name="get_materiais"),
+    path('material/<int:pk>', rud, name="rud_material"),
 ]

@@ -14,6 +14,7 @@ SERIALIZERS = {
     'Grupo': GrupoSerializer,
     'Agenda': AgendaSerializer,
     'Humor': HumorSerializer,
+    'Material': MaterialSerializer,
     'Formulario': FormularioSerializer,
 }
 
@@ -49,6 +50,11 @@ def post(request):
 @api_view(['GET'])
 def get(request):
     param = request.path.split('/')[1].title()[:-1]
+    param = 'Material' if param == 'Materiai' else param
+    model = apps.get_model("amika", param)
+    objetos = model.objects.all()
+    serializer = SERIALIZERS[param](objetos, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
     if param == 'Aluno' and not request.usuario.is_superuser:
         response = Response(status=status.HTTP_403_FORBIDDEN)
