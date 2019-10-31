@@ -1,5 +1,4 @@
 from datetime import datetime, date
-
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
@@ -70,3 +69,18 @@ class AgendaRealizar(models.Model):
     texto = models.TextField(blank=False, null=False)
     anexo = models.FileField(null=False)
     agenda = models.ForeignKey(Agenda, related_name='agenda_relacionada', on_delete=models.SET_NULL, null=True)
+
+class Humor(models.Model):
+    humor_do_dia = models.IntegerField()
+    aluno = models.IntegerField()
+    data = models.DateField(default=datetime.now)
+
+    def __str__(self):
+        return "{} {} {}".format(self.humor_do_dia, self.data, self.aluno)
+
+
+class Material(models.Model):
+    arquivo = models.FileField(upload_to='materiais/')
+
+    def __str__(self):
+        return self.arquivo.name

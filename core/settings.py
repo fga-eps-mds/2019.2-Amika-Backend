@@ -116,6 +116,8 @@ REST_FRAMEWORK = {
 
 JWT_AUTH = {
     'JWT_VERIFY_EXPIRATION': False,
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'amika.utils.jwt_response_payload_handler',
+    'JWT_PAYLOAD_HANDLER': 'amika.utils.jwt_payload_handler',
 }
 
 # Internationalization
@@ -138,6 +140,11 @@ USE_TZ = True
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATIC_URL = '/static/'
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())

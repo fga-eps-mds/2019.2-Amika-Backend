@@ -17,6 +17,8 @@ SERIALIZERS = {
     'Grupo': GrupoSerializer,
     'Agenda': AgendaSerializer,
     'AgendaRealizar': AgendaRealizarSerializer,
+    'Humor': HumorSerializer,
+    'Material': MaterialSerializer,
 }
 
 def serializer_status(serializer, success_status):
@@ -40,6 +42,7 @@ def post(request):
 
     if param == 'Registro':
         serializer = SERIALIZERS[param](data=request.data, many=True)
+
     else:
         serializer = SERIALIZERS[param](data=request.data)
 
@@ -49,10 +52,25 @@ def post(request):
 @api_view(['GET'])
 def get(request):
     param = request.path.split('/')[1].title()[:-1]
+    param = 'Material' if param == 'Materiai' else param
     model = apps.get_model("amika", param)
     objetos = model.objects.all()
     serializer = SERIALIZERS[param](objetos, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def perfil_usuario(request, pk):
+    param = request.path.split('/')[1].title()
+    model = apps.get_model("amika", param)
+    objeto = model.objects.filter(pk=pk).first()
+    if not objeto:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    if request.usuario.is_superuser or request.usuario.username == objeto.username:
+        response = read(param, objeto)
+        return response
+    else:
+        return Response(status=status.HTTP_403_FORBIDDEN)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])

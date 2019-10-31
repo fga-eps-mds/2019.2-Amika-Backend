@@ -1,5 +1,6 @@
 from django.test import TestCase
 
+from amika import serializers
 from amika.serializers import *
 
 
@@ -37,7 +38,6 @@ class TestesAlunoSerializer(TestCase):
         Grupo.objects.create(nome="Feliz")
 
     def testa_criacao_de_aluno(self):
-
         aluno_dados = {
             'username': '123456789',
             'first_name': "Nome",
@@ -73,6 +73,7 @@ class TestesAlunoSerializer(TestCase):
             'password': '123',
             'grupo': 'Felicidade'
         }
+
         serializer = AlunoSerializer(data=aluno_dados)
         serializer.is_valid()
         self.assertEqual(serializer.errors['grupo'][0], 'Grupo não encontrado.')
@@ -85,6 +86,7 @@ class TestesAlunoSerializer(TestCase):
             'password': '123',
             'grupo': 'Feliz'
         }
+
         serializer = AlunoSerializer(data=aluno_dados)
         serializer.is_valid()
         self.assertEqual(serializer.data, aluno_dados)
@@ -116,3 +118,25 @@ class TestesAgendaSerializer(TestCase):
         serializer = AgendaSerializer(data=dados_agenda)
         serializer.is_valid()
         self.assertEqual(serializer.errors['error'][0], "Data de disponibilização maior do que a de encerramento.")
+
+
+class TestesHumor(TestCase):
+    def testa_criacao_de_humor_do_dia(self):
+        humor_do_dia = {
+            "humor_do_dia": "3",
+            "aluno": "2",
+            "data": "2019-10-10"
+        }
+
+        serializer = HumorSerializer().create(humor_do_dia)
+        self.assertTrue(isinstance(serializer, Humor))
+
+    def testa_raises_validation_error(self):
+        humor_do_dia = {
+            "humor_do_dia": "3",
+            "aluno": "2"
+        }
+
+        serializer = HumorSerializer().create(humor_do_dia)
+        if Humor.objects.filter(data=serializer.data, aluno=serializer.aluno):
+            with self.assertRaises(serializers.ValidationError): HumorSerializer().create(humor_do_dia)

@@ -1,13 +1,108 @@
-from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
+from rest_framework.test import APITestCase
 
 from amika.models import *
 
 
-class TesteGet(TestCase):
-    def testa_retorna_objetos(self):
+def criar_aluno(self, username, password, turma, periodo):
+    self.user = Aluno.objects.create(username=username,
+                                     first_name='Nome', last_name="Sobrenome",
+                                     registro=Registro.objects.create(
+                                         matricula=username, turma=turma,
+                                         periodo=periodo
+                                     )
+                                     )
+    self.user.set_password(password)
+    self.user.save()
+
+
+def criar_administrador(self, username, password):
+    self.user = User.objects.create_user(username=username, email='', password=password, is_superuser=True)
+
+
+def criar_dados_usuario(self, username, password):
+    self.dados_usuario = {
+        "username": username,
+        "password": password
+    }
+
+
+def criar_turma(descricao):
+    return Turma.objects.create(descricao=descricao)
+
+
+def criar_periodo(ano, semestre):
+    return Periodo.objects.create(ano=ano, semestre=semestre)
+
+
+def get_token(self):
+    self.url = reverse('login')
+    response = self.client.post(reverse('login'), self.dados_usuario, format='json')
+    try:
+        self.token = response.data['token']
+        self.client.credentials(HTTP_AUTHORIZATION=self.token)
+    except:
+        self.token = ""
+        self.client.credentials(HTTP_AUTHORIZATION=self.token)
+
+
+class TeteAutenticacao(APITestCase):
+
+    def testa_autenticacao(self):
+        periodo = criar_periodo(2020, 2)
+        turma = criar_turma('B')
+        criar_aluno(self, '130126721', 'senha', turma, periodo)
+        criar_dados_usuario(self, '130126721', 'senha')
+        get_token(self)
+        verification_url = reverse('verificar-chave')
+        resp = self.client.post(verification_url, {'token': self.token}, format='json')
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+
+    def testa_autenticacao_token_errado(self):
+        verification_url = reverse('verificar-chave')
+        resp = self.client.post(verification_url, {'token': 'token_errado'}, format='json')
+        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def testa_autenticacao_usuario_errado(self):
+        periodo = criar_periodo(2020, 2)
+        turma = criar_turma('B')
+        criar_aluno(self, '130126721', 'senha', turma, periodo)
+        criar_dados_usuario(self, '130129348', 'senha')
+        get_token(self)
+        verification_url = reverse('verificar-chave')
+        resp = self.client.post(verification_url, {'token': self.token}, format='json')
+        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def testa_autenticacao_senha_errada(self):
+        criar_dados_usuario(self, '130126721', 'senha_errada')
+        get_token(self)
+        verification_url = reverse('verificar-chave')
+        resp = self.client.post(verification_url, {'token': self.token}, format='json')
+        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def testa_sem_autenticacao(self):
         response = self.client.get(reverse('get_registros'))
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def testa_chave_sem_permissao(self):
+        periodo = criar_periodo(2020, 2)
+        turma = criar_turma('B')
+        criar_aluno(self, 'aluno', 'senha_aluno', turma, periodo)
+        criar_dados_usuario(self, 'aluno', 'senha_aluno')
+        get_token(self)
+        response = self.client.get(reverse('get_registros'), {'token': self.token}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+class TesteGet(APITestCase):
+    def setUp(self):
+        criar_administrador(self, 'admin', 'senha')
+        criar_dados_usuario(self, 'admin', 'senha')
+        get_token(self)
+
+    def testa_retorna_objetos(self):
+        response = self.client.get(reverse('get_registros'), {'token': self.token}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def testa_popula_grupos(self):
@@ -25,11 +120,26 @@ class TesteGet(TestCase):
         response = self.client.get(reverse('popula_grupos'))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def testa_perfil_aluno(self):
+        periodo = criar_periodo(2020, 2)
+        turma = criar_turma('B')
+        criar_aluno(self, "123456789", "senha", turma, periodo)
+        criar_dados_usuario(self, '123456789', 'senha')
+        get_token(self)
+        response = self.client.get(reverse('perfil_usuario', kwargs={'pk': self.user.id}), {'token': self.token},
+                                   format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-class TestPost(TestCase):
+
+class TestPost(APITestCase):
+    def setUp(self):
+        criar_administrador(self, 'admin', 'senha_admin')
+        criar_dados_usuario(self, 'admin', 'senha_admin')
+        get_token(self)
+
     def testa_request_sem_dados(self):
         dados = {}
-        response = self.client.post(reverse('post_registro'), dados, content_type='application/json')
+        response = self.client.post(reverse('post_registro'), dados)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def testa_aluno_nao_registrado(self):
@@ -43,20 +153,19 @@ class TestPost(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def teste_cadastra_registo(self):
-        Turma.objects.create(descricao='A')
-
-        registro_dados = [{
-            'matricula': '123456789',
-            'turma': 'A'
-        }]
-        response = self.client.post(reverse('post_registro'), registro_dados, content_type='application/json')
+        turma = Turma.objects.create(descricao='A')
+        registro_dados = {
+            "matricula": "123456789",
+            "turma": "A"
+        }
+        response = self.client.post(reverse('post_registro'), registro_dados)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def teste_cadastra_turma(self):
         turma_dado = {
             'descricao': 'A'
         }
-        response = self.client.post(reverse('post_turma'), turma_dado, content_type='application/json')
+        response = self.client.post(reverse('post_turma'), turma_dado)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def teste_nao_cadastra_turma_com_erro(self):
@@ -67,8 +176,11 @@ class TestPost(TestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
 
-class TesteRud(TestCase):
+class TesteRud(APITestCase):
     def setUp(self):
+        criar_administrador(self, 'admin', 'senha_admin')
+        criar_dados_usuario(self, 'admin', 'senha_admin')
+        get_token(self)
         Turma.objects.create(descricao='A')
 
     def teste_nao_tem_objeto(self):
