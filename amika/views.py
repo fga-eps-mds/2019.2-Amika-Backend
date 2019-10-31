@@ -135,9 +135,9 @@ def popula_grupos(request):
 def get_nao_respondidas(request):
     if request.method == 'GET':
         data_atual = date.today()
-        queryset = Agenda.objects.filter(data_disponibilizacao__lte=data_atual, data_encerramento__gte=data_atual)
-        serializer_class = AgendaSerializer(queryset, many=True)
-        print(serializer_class.data)
+        agendas_feitas = AgendaRealizar.objects.all()
+        agendas_nao_feitas = Agenda.objects.exclude(id__in=agendas_feitas.values('agenda_id'))
+        serializer_class = AgendaSerializer(agendas_nao_feitas, many=True)        
         return Response(serializer_class.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
@@ -145,20 +145,7 @@ def get_respondidas(request):
     if request.method == 'GET':
         queryset = AgendaRealizar.objects.filter()
         serializer_class = AgendaRealizarSerializer(queryset, many=True)
-        print(serializer_class.data)
         return Response(serializer_class.data, status=status.HTTP_200_OK)
-
-@api_view(['GET'])
-def get_agendas(request):
-    data_atual = date.today()
-    agendas_feitas = AgendaRealizar.objects.all()
-    serializer_agendas_feitas = AgendaRealizarSerializer(agendas_feitas, many=True)
-    agendas_nao_feitas = Agenda.objects.exclude(id__in=agendas_feitas.values('agenda_id'))
-    serializer_agendas_nao_feitas = AgendaSerializer(agendas_nao_feitas, many=True)
-    agendas_atuais = Agenda.objects.filter(data_disponibilizacao__lte=data_atual, data_encerramento__gte=data_atual)
-    serializer_agendas_atuais = AgendaSerializer(agendas_atuais, many=True)
-    return Response({"agendas_atuais": serializer_agendas_atuais.data, "agendas_feitas": serializer_agendas_feitas.data, "agendas_nao_feitas": serializer_agendas_nao_feitas.data}, status=status.HTTP_200_OK)
-
 
 class GerenciarAnexosView(APIView):
     def post(self, request, *args, **kwargs):

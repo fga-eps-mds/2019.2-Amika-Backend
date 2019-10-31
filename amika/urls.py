@@ -42,8 +42,7 @@ urlpatterns = [
     path('enviar_anexo/', GerenciarAnexosView.as_view(), name='enviar_anexo'),
     path('obter_nao_respondidas/', get_nao_respondidas, name='obter_nao_respondidas'),
     path('obter_respondidas/', get_respondidas, name="obter_respondidas"),
-    path('obter_agendas/', get_agendas, name="obter_agendas"),
-    
+
     path('material/', post, name="post_material"),
     path('materiais/', get, name="get_materiais"),
     path('material/<int:pk>', rud, name="rud_material"),
