@@ -4,6 +4,8 @@ from django.apps import apps
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.http import JsonResponse
+from datetime import datetime, date, timedelta
 
 from .serializers import *
 
@@ -14,6 +16,7 @@ SERIALIZERS = {
     'Grupo': GrupoSerializer,
     'Agenda': AgendaSerializer,
     'Humor': HumorSerializer,
+    # 'Grafico': GraficoSerializer,
 }
 
 
@@ -66,6 +69,34 @@ def perfil_usuario(request, pk):
         return response
     else:
         return Response(status=status.HTTP_403_FORBIDDEN)
+
+@api_view(['GET'])
+def humor_turma(request, pk):
+    turma = Turma.objects.filter(pk=pk)
+    registro = Registro.objects.filter(turma = turma[0])
+    aluno = Aluno.objects.filter(registro__in = registro)
+    humores = Humor.objects.filter(aluno__in = aluno)
+    serializer = HumorSerializer(humores, many=True)
+    # humores.objects.order_by('data')
+    # data_inicial = humores.objects.first().data
+    data_inicial = date(2019,6,20)
+    humores_dia = 0
+    humor_total = 0
+    response = '0'
+    for humor in humores:
+        if humor.data == data_inicial :
+            humores_dia += 1
+            humor_total += humor.humor_do_dia
+        else:
+            media = humor_total / humores_dia
+            response += media
+            humor_total = 0
+            # data_inicial += timedelta(days=1)
+
+
+    # response = read(humores)
+    return Response(response)    
+
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def rud(request, pk):

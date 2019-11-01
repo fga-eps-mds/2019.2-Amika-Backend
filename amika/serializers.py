@@ -111,3 +111,8 @@ class HumorSerializer(serializers.ModelSerializer):
             return humor
         else:
             raise serializers.ValidationError({"error": "Você já adicionou seu humor hoje!"})
+
+class GraficoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Humor
+        fields = '__all__'
