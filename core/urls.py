@@ -7,7 +7,6 @@ from core import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),
     path('login/', obtain_jwt_token, name='login'),
     path('verificar-chave/', verify_jwt_token, name='verificar-chave'),
     path('', include('amika.urls'))
