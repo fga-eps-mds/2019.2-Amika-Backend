@@ -33,10 +33,6 @@ def post(request):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     param = request.path.split('/')[1].title()
-    if param == 'Aluno' and not Registro.objects.filter(matricula=request.data['username'],
-                                                        periodo__ano=ano(),
-                                                        periodo__semestre=semestre()):
-        return Response({"Matrícula não registrada."}, status=status.HTTP_400_BAD_REQUEST)
 
     if param == 'Registro':
         serializer = SERIALIZERS[param](data=request.data, many=True)

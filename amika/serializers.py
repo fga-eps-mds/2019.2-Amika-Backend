@@ -44,17 +44,22 @@ class AlunoSerializer(serializers.ModelSerializer):
         model = Aluno
         fields = ['id', 'username', 'first_name', 'last_name', 'password', 'grupo', 'formulario']
 
+    def validate_username(self, matricula):
+        if not Registro.objects.filter(matricula=matricula):
+            raise serializers.ValidationError("Matrícula não registrada.")
+        return matricula
+
     def validate_grupo(self, nome):
         if nome and not Grupo.objects.filter(nome=nome):
             raise serializers.ValidationError("Grupo não encontrado.")
         return nome
 
     def create(self, validated_data):
-        aluno = Aluno.objects.get_or_create(
+        aluno = Aluno.objects.create(
             username=validated_data['username'],
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
-            registro=Registro.objects.get(matricula=validated_data['username']))[0]
+            registro=Registro.objects.get(matricula=validated_data['username']))
         aluno.set_password(validated_data['password'])
         aluno.save()
 
