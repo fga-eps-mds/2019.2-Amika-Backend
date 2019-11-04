@@ -27,7 +27,7 @@ class Turma(models.Model):
 class Agenda(models.Model):
     nome = models.CharField(max_length=100)
     descricao = models.CharField(max_length=500)
-    tipo = models.CharField(max_length=10, choices=[['Individual', 'Individual'], ['Individual', 'Grupo']])
+    tipo = models.CharField(max_length=10, choices=[['Individual', 'Individual'], ['Grupo', 'Grupo']])
     data_disponibilizacao = models.DateField(default=datetime.now)
     data_encerramento = models.DateField()
 
