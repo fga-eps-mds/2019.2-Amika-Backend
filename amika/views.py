@@ -1,7 +1,7 @@
 import random
 
 from django.apps import apps
-from rest_framework import status, viewsets
+from rest_framework import status, viewsets, mixins
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.parsers import FileUploadParser
@@ -147,7 +147,17 @@ def get_respondidas(request):
         serializer_class = AgendaRealizarSerializer(queryset, many=True)
         return Response(serializer_class.data, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+def get_agenda(request, pk):
+    if request.method == 'GET':
+        queryset = AgendaRealizar.objects.filter(pk=pk).first()
+        serializer_class = AgendaRealizarSerializer(queryset)
+        return Response(serializer_class.data, status=status.HTTP_200_OK)
+
 class GerenciarAnexosView(APIView):
+    def get_object(self, pk):
+        return AgendaRealizar.objects.get(pk=pk)
+
     def post(self, request, *args, **kwargs):
         serializer = AgendaRealizarSerializer(data=request.data)
         print("Dados {}".format(request.data))
@@ -156,3 +166,15 @@ class GerenciarAnexosView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else: 
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+
+    def put(self, request, pk):
+        queryset = self.get_object(pk)
+        print("queryset {}".format(queryset))
+        print("Dados: {}".format(request.data))
+        serializer_class = AgendaRealizarSerializer(queryset, data=request.data, partial=True)
+        print("OK")
+        if serializer_class.is_valid():
+            print("OK1")
+            serializer_class.save()
+            return Response(serializer_class.data)
+        return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)

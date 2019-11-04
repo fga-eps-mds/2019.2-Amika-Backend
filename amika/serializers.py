@@ -114,6 +114,14 @@ class AgendaRealizarSerializer(serializers.ModelSerializer):
             anexo=validated_data['anexo'],
             agenda=Agenda.objects.get(pk=validated_data['agenda']['id']))
 
+    def update(self, instance, validated_data):
+        instance.texto = validated_data.get('texto', instance.texto)
+        instance.anexo = validated_data.get('anexo', instance.anexo)
+        instance.agenda_id = validated_data('agenda_id', instance.agenda_id)
+
+        instance.save()
+        return instance
+
 class HumorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Humor
