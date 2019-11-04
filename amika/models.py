@@ -42,6 +42,17 @@ class Grupo(models.Model):
         return self.nome
 
 
+class Formulario(models.Model):
+    tipo = models.CharField(max_length=1, choices=[('A', 'A'), ('B', 'B')])
+    pontuacao = models.DecimalField(max_digits=4, decimal_places=2)
+
+    class Meta:
+        ordering = ['tipo', 'pontuacao']
+
+    def __str__(self):
+        return "{} {}".format(self.tipo, self.pontuacao)
+
+
 class Registro(models.Model):
     matricula = models.CharField(max_length=9, validators=[RegexValidator(regex='^\\d{9}$')])
     turma = models.ForeignKey(Turma, on_delete=PROTECT)
@@ -58,6 +69,7 @@ class Registro(models.Model):
 class Aluno(User):
     registro = models.OneToOneField(Registro, on_delete=CASCADE)
     grupo = models.ForeignKey(Grupo, on_delete=PROTECT, null=True)
+    formulario = models.ManyToManyField(Formulario, blank=True)
 
     class Meta:
         ordering = ['username']
