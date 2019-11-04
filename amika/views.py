@@ -54,17 +54,8 @@ def get(request):
     model = apps.get_model("amika", param)
     objetos = model.objects.all()
     serializer = SERIALIZERS[param](objetos, many=True)
+
     return Response(serializer.data, status=status.HTTP_200_OK)
-
-    if param == 'Aluno' and not request.usuario.is_superuser:
-        response = Response(status=status.HTTP_403_FORBIDDEN)
-    else:
-        model = apps.get_model("amika", param)
-        objetos = model.objects.all()
-        serializer = SERIALIZERS[param](objetos, many=True)
-        response = Response(serializer.data, status=status.HTTP_200_OK)
-
-    return response
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -76,20 +67,11 @@ def rud(request, pk):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        if param == 'Aluno' and not (request.usuario.is_superuser or request.usuario.username == objeto.username):
-            response = Response(status=status.HTTP_403_FORBIDDEN)
-        else:
-            response = read(param, objeto)
+        response = read(param, objeto)
     elif request.method == 'PUT':
-        if param == 'Aluno' and not (request.usuario.is_superuser or request.usuario.username == objeto.username):
-            response = Response(status=status.HTTP_403_FORBIDDEN)
-        else:
-            response = put(param, objeto, request.data)
+        response = put(param, objeto, request.data)
     elif request.method == 'DELETE':
-        if param == 'Aluno' and not request.usuario.is_superuser:
-            response = Response(status=status.HTTP_403_FORBIDDEN)
-        else:
-            response = delete(objeto)
+        response = delete(objeto)
 
     return response
 
