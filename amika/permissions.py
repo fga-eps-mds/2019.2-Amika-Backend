@@ -12,7 +12,7 @@ class Permissoes(permissions.BasePermission):
 
 
 def pk(request):
-    return {'pk': dict(request.__dict__)['parser_context']['kwargs']['pk']}
+    return {'pk': dict(request.__dict__)['parser_context']['kwargs'].get('pk')}
 
 
 # Usuários
