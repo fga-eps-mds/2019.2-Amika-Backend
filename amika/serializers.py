@@ -102,12 +102,13 @@ class HumorSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
 
         data = date.today()
-        if not Humor.objects.filter(data = data, aluno = validated_data['aluno']):
+        if not Humor.objects.filter(data = data,aluno = Aluno.objects.get(pk=validated_data['aluno'])):
             humor = Humor.objects.create(
                 humor_do_dia = validated_data['humor_do_dia'],
-                aluno = validated_data['aluno'],
+                aluno = Aluno.objects.get(pk=validated_data['aluno']),
                 data = date.today()
             )
+            humor.save()
             return humor
         else:
             raise serializers.ValidationError({"error": "Você já adicionou seu humor hoje!"})
