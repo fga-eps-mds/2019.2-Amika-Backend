@@ -80,23 +80,22 @@ def humor_turma(request, pk):
     data_inicial = humores.first().data
     data_final = humores.last().data
     soma = 0
-    medias = {}
+    medias = []
     numero_humores = 0
-    datas = 'Datas: '
+    datas = []
     while data_final >= data_inicial:
-        datas += str(data_inicial) + ', '
+        datas.append(data_inicial)
         humores_dia = humores.filter(data = data_inicial)
         for humor in humores_dia:
             soma += humor.humor_do_dia
             numero_humores += 1
-        media = soma/numero_humores
+        medias.append(float("{0:.1f}".format(soma/numero_humores)))
         soma = 0
         numero_humores = 0
         data_inicial += timedelta(days = 1)
-        medias += str(media) + ', '
         
 
-    return Response(datas + medias)    
+    return Response({"medias": medias, "datas": datas})    
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
