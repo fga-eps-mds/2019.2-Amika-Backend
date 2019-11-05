@@ -60,7 +60,8 @@ class TestesAlunoSerializer(TestCase):
         alteracao = {
             'password': '123456',
             'grupo': 'Feliz',
-            'formulario': [{'tipo': 'A', 'pontuacao': 10}]
+            'formulario': [{'tipo': 'A', 'pontuacao': 10}],
+            'foto': '/media/abc.png',
         }
 
         serializer = AlunoSerializer().update(aluno, alteracao)
@@ -105,7 +106,8 @@ class TestesAlunoSerializer(TestCase):
             'last_name': 'Sobrenome',
             'password': '123',
             'grupo': 'Feliz',
-            'formulario': None
+            'formulario': None,
+            'foto': None,
         }
 
         serializer = AlunoSerializer(data=aluno_dados)
