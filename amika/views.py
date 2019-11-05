@@ -75,27 +75,28 @@ def humor_turma(request, pk):
     turma = Turma.objects.filter(pk=pk)
     registro = Registro.objects.filter(turma = turma[0])
     aluno = Aluno.objects.filter(registro__in = registro)
-    humores = Humor.objects.filter(aluno__in = aluno)
-    serializer = HumorSerializer(humores, many=True)
-    # humores.objects.order_by('data')
-    # data_inicial = humores.objects.first().data
-    data_inicial = date(2019,6,20)
-    humores_dia = 0
-    humor_total = 0
-    response = '0'
-    for humor in humores:
-        if humor.data == data_inicial :
-            humores_dia += 1
-            humor_total += humor.humor_do_dia
-        else:
-            media = humor_total / humores_dia
-            response += media
-            humor_total = 0
-            # data_inicial += timedelta(days=1)
+    humores = Humor.objects.filter(aluno__in = aluno).order_by('data')
+    # serializer = HumorSerializer(humores, many = True)
+    data_inicial = humores.first().data
+    data_final = humores.last().data
+    soma = 0
+    medias = {}
+    numero_humores = 0
+    datas = 'Datas: '
+    while data_final >= data_inicial:
+        datas += str(data_inicial) + ', '
+        humores_dia = humores.filter(data = data_inicial)
+        for humor in humores_dia:
+            soma += humor.humor_do_dia
+            numero_humores += 1
+        media = soma/numero_humores
+        soma = 0
+        numero_humores = 0
+        data_inicial += timedelta(days = 1)
+        medias += str(media) + ', '
+        
 
-
-    # response = read(humores)
-    return Response(response)    
+    return Response(datas + medias)    
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
