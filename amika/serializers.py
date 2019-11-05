@@ -42,7 +42,7 @@ class AlunoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Aluno
-        fields = ['id', 'username', 'first_name', 'last_name', 'password', 'grupo', 'formulario']
+        fields = ['id', 'username', 'first_name', 'last_name', 'password', 'grupo', 'formulario', 'foto']
 
     def validate_username(self, matricula):
         if not Registro.objects.filter(matricula=matricula):
@@ -59,7 +59,8 @@ class AlunoSerializer(serializers.ModelSerializer):
             username=validated_data['username'],
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
-            registro=Registro.objects.get(matricula=validated_data['username']))
+            registro=Registro.objects.get(matricula=validated_data['username']),
+            foto=validated_data.get('foto'))
         aluno.set_password(validated_data['password'])
         aluno.save()
 
@@ -82,6 +83,9 @@ class AlunoSerializer(serializers.ModelSerializer):
                                                        pontuacao=validated_data['formulario'][0]['pontuacao'])
 
             aluno.formulario.add(formulario)
+
+        if validated_data.get('foto'):
+            aluno.foto = validated_data['foto']
 
         aluno.save()
         return aluno
