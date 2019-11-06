@@ -144,7 +144,7 @@ def get_agenda(request, pk):
 
 class GerenciarAnexosView(APIView):
     def get_object(self, pk):
-        return AgendaRealizar.objects.get(pk=pk)
+        return AgendaRealizar.objects.filter(pk=pk).first()
 
     def post(self, request, *args, **kwargs):
         serializer = AgendaRealizarSerializer(data=request.data)
@@ -160,9 +160,7 @@ class GerenciarAnexosView(APIView):
         print("queryset {}".format(queryset))
         print("Dados: {}".format(request.data))
         serializer_class = AgendaRealizarSerializer(queryset, data=request.data, partial=True)
-        print("OK")
         if serializer_class.is_valid():
-            print("OK1")
             serializer_class.save()
             return Response(serializer_class.data)
         return Response(serializer_class.errors, status=status.HTTP_400_BAD_REQUEST)
