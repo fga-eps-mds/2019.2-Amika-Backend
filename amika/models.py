@@ -1,4 +1,5 @@
 from datetime import datetime, date
+
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
@@ -20,6 +21,9 @@ class Periodo(models.Model):
 class Turma(models.Model):
     descricao = models.CharField(unique=True, max_length=2)
 
+    class Meta:
+        ordering = ['descricao']
+
     def __str__(self):
         return self.descricao
 
@@ -31,12 +35,18 @@ class Agenda(models.Model):
     data_disponibilizacao = models.DateField(default=datetime.now)
     data_encerramento = models.DateField()
 
+    class Meta:
+        ordering = ['-data_encerramento', '-data_disponibilizacao', 'tipo', 'nome', 'descricao']
+
     def __str__(self):
         return "{} {} {}/{}".format(self.nome, self.tipo, self.data_disponibilizacao, self.data_encerramento)
 
 
 class Grupo(models.Model):
     nome = models.CharField(unique=True, max_length=100)
+
+    class Meta:
+        ordering = ['nome']
 
     def __str__(self):
         return self.nome
@@ -84,12 +94,18 @@ class Humor(models.Model):
     aluno = models.IntegerField()
     data = models.DateField(default=datetime.now)
 
+    class Meta:
+        ordering = ['-data']
+
     def __str__(self):
         return "{} {} {}".format(self.humor_do_dia, self.data, self.aluno)
 
 
 class Material(models.Model):
     arquivo = models.FileField(upload_to='materiais/')
+
+    class Meta:
+        ordering = ['arquivo__nome']
 
     def __str__(self):
         return self.arquivo.name

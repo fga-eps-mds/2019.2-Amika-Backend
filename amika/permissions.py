@@ -12,7 +12,7 @@ class Permissoes(permissions.BasePermission):
 
 
 def pk(request):
-    return {'pk': dict(request.__dict__)['parser_context']['kwargs']['pk']}
+    return {'pk': dict(request.__dict__)['parser_context']['kwargs'].get('pk')}
 
 
 # Usuários
@@ -39,6 +39,8 @@ def usuario_participa_do_grupo(request):
 def post_aluno(request):
     return True
 
+def post_humor(request):
+    return usuario_autenticado(request)
 
 def get_aluno(request):
     return usuario_eh_o_aluno(request) or \
@@ -60,6 +62,9 @@ def get_agendas(request):
 
 
 def get_agenda(request):
+    return usuario_autenticado(request)
+
+def get_humors(request):
     return usuario_autenticado(request)
 
 

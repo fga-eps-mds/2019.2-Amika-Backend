@@ -1,0 +1,10 @@
+[run]
+omit =
+    amika/migrations/*
+    amika/tests/*
+    amika/__init__.py
+    amika/admin.py
+    amika/apps.py
+    core/*
+    manage.py
+[report]
