@@ -80,6 +80,7 @@ class Aluno(User):
     registro = models.OneToOneField(Registro, on_delete=CASCADE)
     grupo = models.ForeignKey(Grupo, on_delete=PROTECT, null=True)
     formulario = models.ManyToManyField(Formulario, blank=True)
+    foto = models.FileField(upload_to='perfil/', null=True)
 
     class Meta:
         ordering = ['username']
