@@ -74,3 +74,18 @@ def get_materiais(request):
 
 def get_material(request):
     return usuario_autenticado(request)
+
+def get_nao_respondidas(request):
+    return usuario_autenticado(request)
+
+def get_respondidas(request):
+    return usuario_autenticado(request)
+
+def get_agenda_realizada(request):
+    return usuario_autenticado(request)
+
+def enviar_anexo(request):
+    return usuario_autenticado(request)
+
+def editar_agenda(request):
+    return usuario_autenticado(request)

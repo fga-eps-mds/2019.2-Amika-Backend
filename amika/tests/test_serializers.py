@@ -2,7 +2,8 @@ from django.test import TestCase
 
 from amika import serializers
 from amika.serializers import *
-
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.urls import reverse
 
 class TestesRegistroSerializer(TestCase):
     def setUp(self):
@@ -60,7 +61,8 @@ class TestesAlunoSerializer(TestCase):
         alteracao = {
             'password': '123456',
             'grupo': 'Feliz',
-            'formulario': [{'tipo': 'A', 'pontuacao': 10}]
+            'formulario': [{'tipo': 'A', 'pontuacao': 10}],
+            'foto': '/media/abc.png',
         }
 
         serializer = AlunoSerializer().update(aluno, alteracao)
@@ -105,7 +107,8 @@ class TestesAlunoSerializer(TestCase):
             'last_name': 'Sobrenome',
             'password': '123',
             'grupo': 'Feliz',
-            'formulario': None
+            'formulario': None,
+            'foto': None,
         }
 
         serializer = AlunoSerializer(data=aluno_dados)
@@ -161,3 +164,54 @@ class TestesHumor(TestCase):
         serializer = HumorSerializer().create(humor_do_dia)
         if Humor.objects.filter(data=serializer.data, aluno=serializer.aluno):
             with self.assertRaises(serializers.ValidationError): HumorSerializer().create(humor_do_dia)
+class TestesAgendaRealizarSerializer(TestCase):
+    def testa_criacao_agenda_realizar(self):
+        agenda1 = Agenda.objects.create(
+            nome="Atividade 2",
+            descricao="descricao agenda...",
+            tipo="individual",
+            data_disponibilizacao="2019-09-09",
+            data_encerramento="2019-09-08")
+        
+        with open('arquivos/banner.png', 'rb') as tratadorArquivo:
+            anexo = tratadorArquivo.read()
+
+        arquivo = SimpleUploadedFile("banner.png", anexo, content_type="file")
+        self.client.post(reverse('enviar_anexo'), {'anexo': arquivo})
+
+        dados_agenda = {
+            'texto': 'Resposta...',
+            'anexo': arquivo,
+            'agenda_id': agenda1.id
+        }
+
+        serializer = AgendaRealizarSerializer(data=dados_agenda)
+        self.assertTrue(serializer.is_valid(), isinstance(serializer, AgendaRealizar))
+    
+    def testa_atualizacao_agenda_realizar(self):
+        with open('arquivos/anexo.txt', 'rb') as tratadorArquivo:
+            anexo = tratadorArquivo.read()
+
+        arquivo = SimpleUploadedFile("anexo.txt", anexo, content_type="file")
+        self.client.post(reverse('enviar_anexo'), {'anexo': arquivo})
+
+        agenda2 = AgendaRealizar.objects.create(
+            texto='Resposta',
+            anexo=arquivo,
+            agenda=Agenda.objects.create(
+                nome="Atividade 2",
+                descricao="descricao agenda...",
+                tipo="Individual",
+                data_disponibilizacao="2019-09-09",
+                data_encerramento="2019-09-10"
+            ))
+
+        agenda_id = AgendaRealizar.objects.first().pk
+
+        dados_alteracao = {
+            'texto': 'Resposta nova',
+            'agenda_id': agenda_id
+        }
+
+        serializer = AgendaRealizarSerializer().update(agenda2, dados_alteracao)
+        self.assertTrue(isinstance(serializer, AgendaRealizar))

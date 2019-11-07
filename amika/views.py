@@ -4,7 +4,7 @@ from django.apps import apps
 from rest_framework import status, viewsets, mixins
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.parsers import FileUploadParser
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.views import APIView
 from django.http import JsonResponse
 from .serializers import *
@@ -36,10 +36,6 @@ def post(request):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     param = request.path.split('/')[1].title()
-    if param == 'Aluno' and not Registro.objects.filter(matricula=request.data['username'],
-                                                        periodo__ano=ano(),
-                                                        periodo__semestre=semestre()):
-        return Response({"Matrícula não registrada."}, status=status.HTTP_400_BAD_REQUEST)
 
     if param == 'Registro':
         serializer = SERIALIZERS[param](data=request.data, many=True)
@@ -54,6 +50,8 @@ def post(request):
 def get(request):
     param = request.path.split('/')[1].title()[:-1]
     param = 'Material' if param == 'Materiai' else param
+    param = 'AgendaRealizar' if param == 'Agendas-Respondida' else param
+    param = 'AgendaRealizar' if param == 'Agendas-Nao-Respondida' else param
     model = apps.get_model("amika", param)
     objetos = model.objects.all()
     serializer = SERIALIZERS[param](objetos, many=True)
@@ -64,6 +62,9 @@ def get(request):
 @api_view(['GET', 'PUT', 'DELETE'])
 def rud(request, pk):
     param = request.path.split('/')[1].title()
+    
+    param = 'AgendaRealizar' if param == 'Agenda-Realizada' else param
+
     model = apps.get_model("amika", param)
     objeto = model.objects.filter(pk=pk).first()
     if not objeto:
@@ -124,22 +125,8 @@ def get_nao_respondidas(request):
     if request.method == 'GET':
         data_atual = date.today()
         agendas_feitas = AgendaRealizar.objects.all()
-        agendas_nao_feitas = Agenda.objects.exclude(id__in=agendas_feitas.values('agenda_id'))
+        agendas_nao_feitas = Agenda.objects.exclude(id__in=agendas_feitas.values('agenda_id')).filter(data_disponibilizacao__lte=data_atual, data_encerramento__gte=data_atual)
         serializer_class = AgendaSerializer(agendas_nao_feitas, many=True)        
-        return Response(serializer_class.data, status=status.HTTP_200_OK)
-
-@api_view(['GET'])
-def get_respondidas(request):
-    if request.method == 'GET':
-        queryset = AgendaRealizar.objects.filter()
-        serializer_class = AgendaRealizarSerializer(queryset, many=True)
-        return Response(serializer_class.data, status=status.HTTP_200_OK)
-
-@api_view(['GET'])
-def get_agenda(request, pk):
-    if request.method == 'GET':
-        queryset = AgendaRealizar.objects.filter(pk=pk).first()
-        serializer_class = AgendaRealizarSerializer(queryset)
         return Response(serializer_class.data, status=status.HTTP_200_OK)
 
 class GerenciarAnexosView(APIView):
@@ -147,8 +134,8 @@ class GerenciarAnexosView(APIView):
         return AgendaRealizar.objects.filter(pk=pk).first()
 
     def post(self, request, *args, **kwargs):
-        serializer = AgendaRealizarSerializer(data=request.data)
-        print("Dados {}".format(request.data))
+        serializer = AgendaRealizarSerializer(data=request.data, partial=True)
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

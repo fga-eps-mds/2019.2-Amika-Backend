@@ -54,6 +54,19 @@ class TestesAgenda(TestCase):
             data_encerramento="2019-09-10")
         self.assertEqual(str(agenda), "Atividade 2 Individual 2019-09-09/2019-09-10")
 
+class TestesAgendaRealizar(TestCase):
+    def testa_str_do_objeto(self):
+        agendaRealizar = AgendaRealizar.objects.create(
+            texto="Resposta atividade 2",
+            anexo="/arquivos/anexo.txt",
+            agenda=Agenda.objects.create(
+                nome="Atividade 2",
+                descricao="descricao agenda...",
+                tipo="Individual",
+                data_disponibilizacao="2019-09-09",
+                data_encerramento="2019-09-10"))
+        self.assertEqual(str(agendaRealizar), 
+        "Resposta atividade 2 /arquivos/anexo.txt Atividade 2 Individual 2019-09-09/2019-09-10")
 
 class TestesHumor(TestCase):
     def testa_str_do_objeto(self):

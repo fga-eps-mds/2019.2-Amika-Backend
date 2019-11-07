@@ -42,7 +42,12 @@ class AlunoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Aluno
-        fields = ['id', 'username', 'first_name', 'last_name', 'password', 'grupo', 'formulario']
+        fields = ['id', 'username', 'first_name', 'last_name', 'password', 'grupo', 'formulario', 'foto']
+
+    def validate_username(self, matricula):
+        if not Registro.objects.filter(matricula=matricula):
+            raise serializers.ValidationError("Matrícula não registrada.")
+        return matricula
 
     def validate_grupo(self, nome):
         if nome and not Grupo.objects.filter(nome=nome):
@@ -50,13 +55,12 @@ class AlunoSerializer(serializers.ModelSerializer):
         return nome
 
     def create(self, validated_data):
-        aluno = Aluno.objects.get_or_create(
+        aluno = Aluno.objects.create_user(
             username=validated_data['username'],
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
-            registro=Registro.objects.get(matricula=validated_data['username']))[0]
-        aluno.set_password(validated_data['password'])
-        aluno.save()
+            password=validated_data['password'],
+            registro=Registro.objects.get(matricula=validated_data['username']))
 
         return aluno
 
@@ -77,6 +81,9 @@ class AlunoSerializer(serializers.ModelSerializer):
                                                        pontuacao=validated_data['formulario'][0]['pontuacao'])
 
             aluno.formulario.add(formulario)
+
+        if validated_data.get('foto'):
+            aluno.foto = validated_data['foto']
 
         aluno.save()
         return aluno
@@ -128,7 +135,7 @@ class AgendaRealizarSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         return AgendaRealizar.objects.create(
             texto=validated_data['texto'],
-            anexo=validated_data['anexo'],
+            anexo=validated_data.get('anexo'),
             agenda=Agenda.objects.get(pk=validated_data['agenda']['id']))
 
     def update(self, instance, validated_data):

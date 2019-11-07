@@ -3,7 +3,7 @@ from datetime import datetime, date
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import PROTECT, CASCADE
+from django.db.models import PROTECT, CASCADE, SET_NULL
 
 
 class Periodo(models.Model):
@@ -76,10 +76,15 @@ class Registro(models.Model):
         return "{} {} {}".format(self.periodo, self.turma, self.matricula)
 
 
+def aluno_foto_diretorio(instance, filename):
+    return '{}/foto_perfil/{}'.format(instance.aluno.username, filename)
+
+
 class Aluno(User):
     registro = models.OneToOneField(Registro, on_delete=CASCADE)
-    grupo = models.ForeignKey(Grupo, on_delete=PROTECT, null=True)
+    grupo = models.ForeignKey(Grupo, on_delete=SET_NULL, null=True)
     formulario = models.ManyToManyField(Formulario, blank=True)
+    foto = models.ImageField(upload_to=aluno_foto_diretorio, null=True)
 
     class Meta:
         ordering = ['username']
@@ -88,9 +93,15 @@ class Aluno(User):
         return "{} {}".format(self.username, self.get_full_name())
 
 class AgendaRealizar(models.Model):
-    texto = models.TextField(blank=False, null=False)
-    anexo = models.FileField(null=False)
+    texto = models.TextField()
+    anexo = models.FileField(null=True)
     agenda = models.ForeignKey(Agenda, related_name='agenda_relacionada', on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        ordering = ['texto', 'anexo', 'agenda']
+
+    def __str__(self):
+        return "{} {} {}".format(self.texto, self.anexo, self.agenda)
 
 class Humor(models.Model):
     humor_do_dia = models.IntegerField()
