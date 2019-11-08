@@ -3,7 +3,7 @@ from datetime import datetime, date
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import PROTECT, CASCADE
+from django.db.models import PROTECT, CASCADE, SET_NULL
 
 
 class Periodo(models.Model):
@@ -78,7 +78,7 @@ class Registro(models.Model):
 
 class Aluno(User):
     registro = models.OneToOneField(Registro, on_delete=CASCADE)
-    grupo = models.ForeignKey(Grupo, on_delete=PROTECT, null=True)
+    grupo = models.ForeignKey(Grupo, on_delete=SET_NULL, null=True)
     formulario = models.ManyToManyField(Formulario, blank=True)
     foto = models.FileField(upload_to='perfil/', null=True)
 
