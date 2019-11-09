@@ -9,6 +9,12 @@ class TurmaSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class FormularioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Formulario
+        fields = '__all__'
+
+
 class RegistroSerializer(serializers.ModelSerializer):
     turma = serializers.CharField(max_length=2, min_length=1)
     ano = serializers.ReadOnlyField(source='periodo.ano')
@@ -32,10 +38,16 @@ class RegistroSerializer(serializers.ModelSerializer):
 
 class AlunoSerializer(serializers.ModelSerializer):
     grupo = serializers.CharField(max_length=100, allow_null=True, default=None)
+    formulario = FormularioSerializer(many=True, allow_null=True, default=None)
 
     class Meta:
         model = Aluno
-        fields = ['id', 'username', 'first_name', 'last_name', 'password', 'grupo']
+        fields = ['id', 'username', 'first_name', 'last_name', 'password', 'grupo', 'formulario', 'foto']
+
+    def validate_username(self, matricula):
+        if not Registro.objects.filter(matricula=matricula):
+            raise serializers.ValidationError("Matrícula não registrada.")
+        return matricula
 
     def validate_grupo(self, nome):
         if nome and not Grupo.objects.filter(nome=nome):
@@ -43,12 +55,12 @@ class AlunoSerializer(serializers.ModelSerializer):
         return nome
 
     def create(self, validated_data):
-        aluno = Aluno.objects.get_or_create(
+        aluno = Aluno.objects.create(
             username=validated_data['username'],
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
             registro=Registro.objects.get(matricula=validated_data['username']),
-            grupo=None)[0]
+            foto=validated_data.get('foto'))
         aluno.set_password(validated_data['password'])
         aluno.save()
 
@@ -60,6 +72,20 @@ class AlunoSerializer(serializers.ModelSerializer):
 
         if validated_data.get('grupo'):
             aluno.grupo = Grupo.objects.get(nome=validated_data['grupo'])
+
+        if validated_data.get('formulario'):
+            formulario = Formulario.objects.filter(tipo=validated_data['formulario'][0]['tipo']).first()
+            if formulario:
+                formulario.pontuacao = validated_data['formulario'][0]['pontuacao']
+                formulario.save()
+            else:
+                formulario = Formulario.objects.create(tipo=validated_data['formulario'][0]['tipo'],
+                                                       pontuacao=validated_data['formulario'][0]['pontuacao'])
+
+            aluno.formulario.add(formulario)
+
+        if validated_data.get('foto'):
+            aluno.foto = validated_data['foto']
 
         aluno.save()
         return aluno
@@ -94,6 +120,7 @@ def ano():
 def semestre():
     return 1 if date.today().month <= 6 else 2
 
+
 class HumorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Humor
@@ -113,7 +140,8 @@ class HumorSerializer(serializers.ModelSerializer):
         else:
             raise serializers.ValidationError({"error": "Você já adicionou seu humor hoje!"})
 
-class GraficoSerializer(serializers.ModelSerializer):
+
+class MaterialSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Humor
+        model = Material
         fields = '__all__'

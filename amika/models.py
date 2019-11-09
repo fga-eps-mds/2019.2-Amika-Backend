@@ -3,7 +3,7 @@ from datetime import datetime, date
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from django.db import models
-from django.db.models import PROTECT, CASCADE
+from django.db.models import PROTECT, CASCADE, SET_NULL
 
 
 class Periodo(models.Model):
@@ -21,6 +21,9 @@ class Periodo(models.Model):
 class Turma(models.Model):
     descricao = models.CharField(unique=True, max_length=2)
 
+    class Meta:
+        ordering = ['descricao']
+
     def __str__(self):
         return self.descricao
 
@@ -28,9 +31,12 @@ class Turma(models.Model):
 class Agenda(models.Model):
     nome = models.CharField(max_length=100)
     descricao = models.CharField(max_length=500)
-    tipo = models.CharField(max_length=10, choices=[['Individual', 'Individual'], ['Individual', 'Grupo']])
+    tipo = models.CharField(max_length=10, choices=[['Individual', 'Individual'], ['Grupo', 'Grupo']])
     data_disponibilizacao = models.DateField(default=datetime.now)
     data_encerramento = models.DateField()
+
+    class Meta:
+        ordering = ['-data_encerramento', '-data_disponibilizacao', 'tipo', 'nome', 'descricao']
 
     def __str__(self):
         return "{} {} {}/{}".format(self.nome, self.tipo, self.data_disponibilizacao, self.data_encerramento)
@@ -39,8 +45,22 @@ class Agenda(models.Model):
 class Grupo(models.Model):
     nome = models.CharField(unique=True, max_length=100)
 
+    class Meta:
+        ordering = ['nome']
+
     def __str__(self):
         return self.nome
+
+
+class Formulario(models.Model):
+    tipo = models.CharField(max_length=1, choices=[('A', 'A'), ('B', 'B')])
+    pontuacao = models.DecimalField(max_digits=4, decimal_places=2)
+
+    class Meta:
+        ordering = ['tipo', 'pontuacao']
+
+    def __str__(self):
+        return "{} {}".format(self.tipo, self.pontuacao)
 
 
 class Registro(models.Model):
@@ -58,7 +78,9 @@ class Registro(models.Model):
 
 class Aluno(User):
     registro = models.OneToOneField(Registro, on_delete=CASCADE)
-    grupo = models.ForeignKey(Grupo, on_delete=PROTECT, null=True)
+    grupo = models.ForeignKey(Grupo, on_delete=SET_NULL, null=True)
+    formulario = models.ManyToManyField(Formulario, blank=True)
+    foto = models.FileField(upload_to='perfil/', null=True)
 
     class Meta:
         ordering = ['username']
@@ -66,10 +88,24 @@ class Aluno(User):
     def __str__(self):
         return "{} {}".format(self.username, self.get_full_name())
 
+
 class Humor(models.Model):
     humor_do_dia = models.IntegerField()
     aluno = models.ForeignKey(Aluno, on_delete=PROTECT)
     data = models.DateField(default=datetime.now)
 
+    class Meta:
+        ordering = ['-data']
+
     def __str__(self):
         return "{} {} {}".format(self.humor_do_dia, self.data, self.aluno)
+
+
+class Material(models.Model):
+    arquivo = models.FileField(upload_to='materiais/')
+
+    class Meta:
+        ordering = ['arquivo__nome']
+
+    def __str__(self):
+        return self.arquivo.name
