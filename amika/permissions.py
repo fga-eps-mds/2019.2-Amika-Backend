@@ -21,6 +21,7 @@ def usuario_eh_admin(request):
 
 
 def usuario_autenticado(request):
+    print(request.user.is_authenticated)
     return request.user and request.user.is_authenticated
 
 
@@ -40,6 +41,11 @@ def post_aluno(request):
     return True
 
 def post_humor(request):
+    print('asjdnadj')
+    return usuario_autenticado(request)
+
+def get_humor(request):
+    print('asjdnadj')
     return usuario_autenticado(request)
 
 def get_aluno(request):

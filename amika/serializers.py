@@ -128,6 +128,7 @@ class HumorSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
 
+        print(validated_data['aluno'])
         data = date.today()
         if not Humor.objects.filter(data=data, aluno=validated_data['aluno']):
             humor = Humor.objects.create(

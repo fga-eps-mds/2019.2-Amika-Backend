@@ -29,6 +29,7 @@ def serializer_status(serializer, success_status):
 
 @api_view(['POST'])
 def post(request):
+    request.data['aluno'] = request.user.id
     if not request.data:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -38,6 +39,8 @@ def post(request):
         serializer = SERIALIZERS[param](data=request.data, many=True)
 
     else:
+        print(request.data)
+        print(request.user.id)
         serializer = SERIALIZERS[param](data=request.data)
 
     return serializer_status(serializer, status.HTTP_201_CREATED)
