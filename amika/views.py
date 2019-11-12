@@ -56,6 +56,17 @@ def get(request):
 
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+def humor_status(request):
+    humor = Humor.objects.filter(data = date.today(), aluno = request.user.id).first()
+    if humor:
+        adicionado = True
+        humor_do_dia = humor.humor_do_dia
+    else:
+        adicionado = False
+        humor_do_dia = 0
+
+    return Response({"adicionado": adicionado, "humor": humor_do_dia})
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def rud(request, pk):

@@ -39,4 +39,5 @@ urlpatterns = [
     # Aluno
     path('humor/', post, name="post_humor"),
     path('humors/', get, name="get_humors"),
+    path('statushumor/', humor_status, name="get_humor_status"),
 ]
