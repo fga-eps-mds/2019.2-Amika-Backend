@@ -30,6 +30,7 @@ def serializer_status(serializer, success_status):
 @api_view(['POST'])
 def post(request):
     request.data['aluno'] = request.user.id
+    print(request.user.id)
     if not request.data:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -40,7 +41,6 @@ def post(request):
 
     else:
         print(request.data)
-        print(request.user.id)
         serializer = SERIALIZERS[param](data=request.data)
 
     return serializer_status(serializer, status.HTTP_201_CREATED)
@@ -58,6 +58,7 @@ def get(request):
 
 @api_view(['GET'])
 def humor_status(request):
+    print(request.user.id)
     humor = Humor.objects.filter(data = date.today(), aluno = request.user.id).first()
     if humor:
         adicionado = True
@@ -66,7 +67,7 @@ def humor_status(request):
         adicionado = False
         humor_do_dia = 0
 
-    return Response({"adicionado": adicionado, "humor": humor_do_dia})
+    return Response({"adicionado": adicionado, "humor": humor_do_dia}, status = status.HTTP_200_OK)
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def rud(request, pk):

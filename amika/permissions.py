@@ -37,6 +37,9 @@ def usuario_participa_do_grupo(request):
 
 
 # Permissões
+
+
+
 def post_aluno(request):
     return True
 
@@ -62,7 +65,6 @@ def get_grupo(request):
     return usuario_participa_do_grupo(request) or \
            usuario_eh_admin(request)
 
-
 def get_agendas(request):
     return usuario_autenticado(request)
 
@@ -79,4 +81,7 @@ def get_materiais(request):
 
 
 def get_material(request):
+    return usuario_autenticado(request)
+
+def get_humor_status(request):
     return usuario_autenticado(request)
