@@ -10,4 +10,7 @@ urlpatterns = [
     path('login/', obtain_jwt_token, name='login'),
     path('verificar-chave/', verify_jwt_token, name='verificar-chave'),
     path('', include('amika.urls'))
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
