@@ -3,6 +3,14 @@ from rest_framework import serializers
 from .models import *
 
 
+def ano():
+    return date.today().year
+
+
+def semestre():
+    return 1 if date.today().month <= 6 else 2
+
+
 class TurmaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Turma
@@ -102,7 +110,7 @@ class AgendaSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if kwargs:
+        if kwargs and kwargs.get('data') and kwargs['data'].get('tipo'):
             kwargs['data']['tipo'] = kwargs['data']['tipo'].capitalize()
 
     def validate(self, data):
@@ -110,40 +118,24 @@ class AgendaSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"error": "Data de disponibilização maior do que a de encerramento."})
         return data
 
-def ano():
-    return date.today().year
 
-
-def semestre():
-    return 1 if date.today().month <= 6 else 2
-
-class AgendaRealizarSerializer(serializers.ModelSerializer):
-    agenda_id = serializers.CharField(source='agenda.id')
-    agenda_nome = serializers.ReadOnlyField(source='agenda.nome')
-    agenda_descricao = serializers.ReadOnlyField(source='agenda.descricao')
-    agenda_tipo = serializers.ReadOnlyField(source='agenda.tipo')
-    agenda_data_disponibilizacao = serializers.ReadOnlyField(source='agenda.data_disponibilizacao')
-    agenda_data_encerramento = serializers.ReadOnlyField(source='agenda.data_encerramento')
+class AgendaRealizadaSerializer(serializers.ModelSerializer):
+    agenda = serializers.PrimaryKeyRelatedField(read_only=False, queryset=Agenda.objects.all())
+    aluno = serializers.PrimaryKeyRelatedField(read_only=False, queryset=Aluno.objects.all())
 
     class Meta:
-        model = AgendaRealizar
-        fields = ['id', 'texto', 'anexo', 'agenda_id', 'agenda_descricao', 
-                    'agenda_nome', 'agenda_tipo', 'agenda_data_disponibilizacao', 
-                    'agenda_data_encerramento',
-                ]
-
-    def create(self, validated_data):
-        return AgendaRealizar.objects.create(
-            texto=validated_data['texto'],
-            anexo=validated_data.get('anexo'),
-            agenda=Agenda.objects.get(pk=validated_data['agenda']['id']))
+        model = AgendaRealizada
+        fields = '__all__'
 
     def update(self, instance, validated_data):
-        instance.texto = validated_data.get('texto', instance.texto)
-        instance.anexo = validated_data.get('anexo', instance.anexo)
+        if validated_data.get('texto'):
+            instance.texto = validated_data['texto']
+        if validated_data.get('anexo'):
+            instance.anexo = validated_data['anexo']
 
         instance.save()
         return instance
+
 
 class HumorSerializer(serializers.ModelSerializer):
     class Meta:

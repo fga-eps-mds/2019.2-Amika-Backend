@@ -164,54 +164,34 @@ class TestesHumor(TestCase):
         serializer = HumorSerializer().create(humor_do_dia)
         if Humor.objects.filter(data=serializer.data, aluno=serializer.aluno):
             with self.assertRaises(serializers.ValidationError): HumorSerializer().create(humor_do_dia)
-class TestesAgendaRealizarSerializer(TestCase):
-    def testa_criacao_agenda_realizar(self):
-        agenda1 = Agenda.objects.create(
-            nome="Atividade 2",
-            descricao="descricao agenda...",
-            tipo="individual",
-            data_disponibilizacao="2019-09-09",
-            data_encerramento="2019-09-08")
-        
-        with open('arquivos/banner.png', 'rb') as tratadorArquivo:
-            anexo = tratadorArquivo.read()
 
-        arquivo = SimpleUploadedFile("banner.png", anexo, content_type="file")
-        self.client.post(reverse('enviar_anexo'), {'anexo': arquivo})
 
-        dados_agenda = {
-            'texto': 'Resposta...',
-            'anexo': arquivo,
-            'agenda_id': agenda1.id
-        }
-
-        serializer = AgendaRealizarSerializer(data=dados_agenda)
-        self.assertTrue(serializer.is_valid(), isinstance(serializer, AgendaRealizar))
-    
-    def testa_atualizacao_agenda_realizar(self):
-        with open('arquivos/anexo.txt', 'rb') as tratadorArquivo:
-            anexo = tratadorArquivo.read()
-
-        arquivo = SimpleUploadedFile("anexo.txt", anexo, content_type="file")
-        self.client.post(reverse('enviar_anexo'), {'anexo': arquivo})
-
-        agenda2 = AgendaRealizar.objects.create(
-            texto='Resposta',
-            anexo=arquivo,
+class TestesAgendaRealizadaSerializer(TestCase):
+    def testa_atualizacao_de_agenda_realizada(self):
+        agenda_realizada = AgendaRealizada.objects.create(
+            texto="Resposta atividade 2",
+            anexo=SimpleUploadedFile("file.mp4", b"file_content", content_type="video/mp4"),
             agenda=Agenda.objects.create(
                 nome="Atividade 2",
                 descricao="descricao agenda...",
                 tipo="Individual",
                 data_disponibilizacao="2019-09-09",
-                data_encerramento="2019-09-10"
-            ))
+                data_encerramento="2019-09-10"),
+            aluno=Aluno.objects.create(
+                username="123456789",
+                first_name="Nome",
+                last_name="Sobrenome",
+                password="123",
+                registro=Registro.objects.create(
+                    matricula=123456789,
+                    turma=Turma.objects.create(descricao="A"),
+                    periodo=Periodo.objects.create(ano=2019, semestre=2))))
 
-        agenda_id = AgendaRealizar.objects.first().pk
-
-        dados_alteracao = {
-            'texto': 'Resposta nova',
-            'agenda_id': agenda_id
+        alteracoes = {
+            'texto': 'Agenda 2 realizada',
+            'anexo': '/media/abc.png',
         }
 
-        serializer = AgendaRealizarSerializer().update(agenda2, dados_alteracao)
-        self.assertTrue(isinstance(serializer, AgendaRealizar))
+        serializer = AgendaRealizadaSerializer().update(agenda_realizada, alteracoes)
+        self.assertTrue(isinstance(serializer, AgendaRealizada))
+
