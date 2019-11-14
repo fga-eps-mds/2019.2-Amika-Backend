@@ -55,14 +55,12 @@ class AlunoSerializer(serializers.ModelSerializer):
         return nome
 
     def create(self, validated_data):
-        aluno = Aluno.objects.create(
+        aluno = Aluno.objects.create_user(
             username=validated_data['username'],
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
-            registro=Registro.objects.get(matricula=validated_data['username']),
-            foto=validated_data.get('foto'))
-        aluno.set_password(validated_data['password'])
-        aluno.save()
+            password=validated_data['password'],
+            registro=Registro.objects.get(matricula=validated_data['username']))
 
         return aluno
 
