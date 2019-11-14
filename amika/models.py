@@ -76,11 +76,15 @@ class Registro(models.Model):
         return "{} {} {}".format(self.periodo, self.turma, self.matricula)
 
 
+def aluno_foto_diretorio(instance, filename):
+    return '{}/foto_perfil/{}'.format(instance.aluno.username, filename)
+
+
 class Aluno(User):
     registro = models.OneToOneField(Registro, on_delete=CASCADE)
     grupo = models.ForeignKey(Grupo, on_delete=SET_NULL, null=True)
     formulario = models.ManyToManyField(Formulario, blank=True)
-    foto = models.FileField(upload_to='perfil/', null=True)
+    foto = models.ImageField(upload_to=aluno_foto_diretorio, null=True)
 
     class Meta:
         ordering = ['username']
