@@ -109,7 +109,7 @@ class Material(models.Model):
     arquivo = models.FileField(upload_to='materiais/')
 
     class Meta:
-        ordering = ['arquivo__nome']
+        ordering = ['arquivo']
 
     def __str__(self):
-        return self.arquivo.name
+        return self.arquivo
