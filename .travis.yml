@@ -21,6 +21,8 @@ before_install:
 
   - sudo /etc/init.d/postgresql stop
 
+  - echo -e "\nENV COVERALLS_REPO_TOKEN ${COVERALLS_REPO_TOKEN}" >> Dockerfile
+
 script:
   - docker-compose up -d --build
   - >
