@@ -27,8 +27,10 @@ script:
     while ! docker logs backend | grep "Starting development server at http://0:8000/"; do
       sleep 5
     done;
-  - docker exec -it backend python3 manage.py migrate
-  - docker exec -it backend python3 manage.py test
+  - docker exec -it backend bash -c '
+      python3 manage.py migrate &&
+      coverage run --source='.' manage.py test &&
+      coveralls'
 
 after_script:
   - docker-compose down --remove-orphans
