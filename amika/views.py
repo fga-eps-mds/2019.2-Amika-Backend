@@ -1,3 +1,4 @@
+import json
 import random
 
 from django.apps import apps
@@ -62,10 +63,14 @@ def get(request):
 
 @api_view(['GET'])
 def agendas_realizadas_aluno(request, pk):
-    agendas_realizadas = Agenda.objects.filter(
-        id__in=AgendaRealizada.objects.filter(aluno_id=pk).values('agenda_id'))
-    serializer = AgendaSerializer(agendas_realizadas, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    agendas_realizadas = []
+    for r in AgendaRealizada.objects.select_related('agenda').filter(aluno_id=pk):
+        agendas_realizadas.append({
+            "agenda": AgendaSerializer(r.agenda).data,
+            "realizacao": AgendaRealizadaSerializer(r).data
+        })
+
+    return Response(json.dumps(agendas_realizadas), status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
