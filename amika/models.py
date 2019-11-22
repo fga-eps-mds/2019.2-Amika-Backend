@@ -107,7 +107,9 @@ class AgendaRealizada(models.Model):
 
     class Meta:
         unique_together = ['agenda', 'aluno']
-        ordering = ['agenda__nome', '-data_ultima_alteracao', '-data_criacao', 'aluno__username']
+        ordering = ['-agenda__data_encerramento', '-agenda__data_disponibilizacao', 'agenda__tipo', 'agenda__nome',
+                    '-data_ultima_alteracao', '-data_criacao',
+                    'aluno__username']
 
     def __str__(self):
         return "{} {} {}".format(self.aluno.username, self.agenda.nome, self.data_ultima_alteracao)
