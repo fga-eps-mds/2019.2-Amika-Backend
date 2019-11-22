@@ -112,3 +112,8 @@ def get_agendas_nao_realizadas_aluno(request):
 def put_agenda_realizada(request):
     return usuario_eh_dono_da_agenda_realizada(request) or \
            usuario_eh_admin(request)
+
+
+def delete_agenda_realizada(request):
+    return usuario_eh_dono_da_agenda_realizada(request) or \
+           usuario_eh_admin(request)
