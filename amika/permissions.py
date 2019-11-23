@@ -89,6 +89,8 @@ def get_materiais(request):
 def get_material(request):
     return usuario_autenticado(request)
 
+def get_alunos_grupo(request):
+    return usuario_autenticado(request)
 
 def post_agenda_realizada(request):
     return usuario_autenticado(request)

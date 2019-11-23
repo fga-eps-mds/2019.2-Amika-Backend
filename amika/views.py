@@ -60,6 +60,15 @@ def get(request):
 
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+def get_alunos_grupo(request):
+    param = 'Aluno'
+    grupo = Grupo.objects.filter(aluno = request.user.id).first()
+    alunos = Aluno.objects.filter(grupo = grupo)
+    serializer = SERIALIZERS[param](alunos, many=True)
+
+    return Response(serializer.data, status=status.HTTP_200_OK )
+
 
 @api_view(['GET'])
 def agendas_realizadas_aluno(request, pk):
