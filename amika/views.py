@@ -1,3 +1,4 @@
+import json
 import random
 
 from django.apps import apps
@@ -13,11 +14,11 @@ SERIALIZERS = {
     'Aluno': AlunoSerializer,
     'Grupo': GrupoSerializer,
     'Agenda': AgendaSerializer,
+    'AgendaRealizada': AgendaRealizadaSerializer,
     'Humor': HumorSerializer,
     'Material': MaterialSerializer,
     'Formulario': FormularioSerializer,
 }
-
 
 def serializer_status(serializer, success_status):
     if serializer.is_valid():
@@ -33,6 +34,7 @@ def post(request):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     param = request.path.split('/')[1].title()
+    param = 'AgendaRealizada' if param == 'Agenda-Realizada' else param
 
     if param == 'Registro':
         serializer = SERIALIZERS[param](data=request.data, many=True)
@@ -46,7 +48,12 @@ def post(request):
 @api_view(['GET'])
 def get(request):
     param = request.path.split('/')[1].title()[:-1]
-    param = 'Material' if param == 'Materiai' else param
+    if param in ['Materiai', 'Agendas-Realizada', 'Agendas-Nao-Realizada']:
+        if param == 'Materiai':
+            param = 'Material'
+        else:
+            param = 'AgendaRealizada'
+
     model = apps.get_model("amika", param)
     objetos = model.objects.all()
     serializer = SERIALIZERS[param](objetos, many=True)
@@ -63,9 +70,31 @@ def get_alunos_grupo(request):
     return Response(serializer.data, status=status.HTTP_200_OK )
 
 
+@api_view(['GET'])
+def agendas_realizadas_aluno(request, pk):
+    agendas_realizadas = []
+    for r in AgendaRealizada.objects.select_related('agenda').filter(aluno_id=pk):
+        agendas_realizadas.append({
+            "agenda": AgendaSerializer(r.agenda).data,
+            "realizacao": AgendaRealizadaSerializer(r).data
+        })
+
+    return Response(json.dumps(agendas_realizadas), status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def agendas_nao_realizadas_aluno(request, pk):
+    agendas_nao_realizadas = Agenda.objects.exclude(
+        id__in=AgendaRealizada.objects.filter(aluno_id=pk).values('agenda_id'))
+    serializer = AgendaSerializer(agendas_nao_realizadas, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 @api_view(['GET', 'PUT', 'DELETE'])
 def rud(request, pk):
     param = request.path.split('/')[1].title()
+    param = 'AgendaRealizada' if param == 'Agenda-Realizada' else param
+
     model = apps.get_model("amika", param)
     objeto = model.objects.filter(pk=pk).first()
     if not objeto:

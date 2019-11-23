@@ -143,8 +143,8 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_URL = '/static/'
 
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = '/arquivos/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'arquivos')
 
 
 # Activate Django-Heroku.

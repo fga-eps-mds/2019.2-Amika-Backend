@@ -6,7 +6,7 @@
 
 
 #### [Amika-Backend](https://github.com/fga-eps-mds/2019.2-Amika-Backend)
-[![Build Status](https://travis-ci.org/fga-eps-mds/2019.2-Amika-Backend.svg?branch=master)](https://travis-ci.org/fga-eps-mds/2019.2-Amika-Backend)
+[![Build Status](https://travis-ci.org/fga-eps-mds/2019.2-Amika-Backend.svg?branch=develop)](https://travis-ci.org/fga-eps-mds/2019.2-Amika-Backend)
 [![Maintainability](https://api.codeclimate.com/v1/badges/fa0fbed2c8fa7014e542/maintainability)](https://codeclimate.com/github/fga-eps-mds/2019.2-Amika-Backend/maintainability)
 [![Coverage Status](https://coveralls.io/repos/github/fga-eps-mds/2019.2-Amika-Backend/badge.svg?branch=develop)](https://coveralls.io/github/fga-eps-mds/2019.2-Amika-Backend?branch=develop)
 
@@ -16,7 +16,7 @@
 - [Produção](https://amika-backend.herokuapp.com/)
 
 #### [Amika-Frontend](https://github.com/fga-eps-mds/2019.2-Amika-Frontend)
-[![Build Status](https://travis-ci.org/fga-eps-mds/2019.2-Amika-Frontend.svg?branch=master)](https://travis-ci.org/fga-eps-mds/2019.2-Amika-Frontend)
+[![Build Status](https://travis-ci.org/fga-eps-mds/2019.2-Amika-Frontend.svg?branch=develop)](https://travis-ci.org/fga-eps-mds/2019.2-Amika-Frontend)
 [![Maintainability](https://api.codeclimate.com/v1/badges/e6c21399ba32b11ab1d1/maintainability)](https://codeclimate.com/github/fga-eps-mds/2019.2-Amika-Frontend/maintainability)
 [![Coverage Status](https://coveralls.io/repos/github/fga-eps-mds/2019.2-Amika-Frontend/badge.svg?branch=develop)](https://coveralls.io/github/fga-eps-mds/2019.2-Amika-Frontend?branch=develop)
 

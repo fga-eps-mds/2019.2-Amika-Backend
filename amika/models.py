@@ -93,6 +93,28 @@ class Aluno(User):
         return "{} {}".format(self.username, self.get_full_name())
 
 
+def aluno_agenda_realizada_diretorio(instance, filename):
+    return '{}/agenda_realizada/{}'.format(instance.aluno.username, filename)
+
+
+class AgendaRealizada(models.Model):
+    data_criacao = models.DateField(auto_now_add=True)
+    data_ultima_alteracao = models.DateField(auto_now_add=True)
+    texto = models.TextField()
+    anexo = models.FileField(upload_to=aluno_agenda_realizada_diretorio, null=True)
+    agenda = models.ForeignKey(Agenda, on_delete=CASCADE)
+    aluno = models.ForeignKey(Aluno, on_delete=CASCADE)
+
+    class Meta:
+        unique_together = ['agenda', 'aluno']
+        ordering = ['-agenda__data_encerramento', '-agenda__data_disponibilizacao', 'agenda__tipo', 'agenda__nome',
+                    '-data_ultima_alteracao', '-data_criacao',
+                    'aluno__username']
+
+    def __str__(self):
+        return "{} {} {}".format(self.aluno.username, self.agenda.nome, self.data_ultima_alteracao)
+
+
 class Humor(models.Model):
     humor_do_dia = models.IntegerField()
     aluno = models.IntegerField()
@@ -109,7 +131,7 @@ class Material(models.Model):
     arquivo = models.FileField(upload_to='materiais/')
 
     class Meta:
-        ordering = ['arquivo__nome']
+        ordering = ['arquivo']
 
     def __str__(self):
-        return self.arquivo.name
+        return self.arquivo

@@ -3,6 +3,14 @@ from rest_framework import serializers
 from .models import *
 
 
+def ano():
+    return date.today().year
+
+
+def semestre():
+    return 1 if date.today().month <= 6 else 2
+
+
 class TurmaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Turma
@@ -102,7 +110,7 @@ class AgendaSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if kwargs:
+        if kwargs and kwargs.get('data') and kwargs['data'].get('tipo'):
             kwargs['data']['tipo'] = kwargs['data']['tipo'].capitalize()
 
     def validate(self, data):
@@ -111,12 +119,22 @@ class AgendaSerializer(serializers.ModelSerializer):
         return data
 
 
-def ano():
-    return date.today().year
+class AgendaRealizadaSerializer(serializers.ModelSerializer):
+    agenda = serializers.PrimaryKeyRelatedField(read_only=False, queryset=Agenda.objects.all())
+    aluno = serializers.PrimaryKeyRelatedField(read_only=False, queryset=Aluno.objects.all())
 
+    class Meta:
+        model = AgendaRealizada
+        fields = '__all__'
 
-def semestre():
-    return 1 if date.today().month <= 6 else 2
+    def update(self, instance, validated_data):
+        if validated_data.get('texto'):
+            instance.texto = validated_data['texto']
+        if validated_data.get('anexo'):
+            instance.anexo = validated_data['anexo']
+
+        instance.save()
+        return instance
 
 
 class HumorSerializer(serializers.ModelSerializer):
