@@ -2,6 +2,8 @@ import json
 
 from django.urls import reverse
 from rest_framework.test import APITestCase
+from django.core.files.uploadedfile import SimpleUploadedFile
+from io import BytesIO
 
 from amika.views import *
 
@@ -29,6 +31,16 @@ class TestesGet(APITestCase):
                 registro=Registro.objects.create(matricula=str(i), turma=turma, periodo=periodo))
 
         response = self.client.get(reverse('popula_grupos'), HTTP_AUTHORIZATION=self.authorization)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def testa_agendas_realizadas_aluno(self):
+        response = self.client.get(reverse('get_agendas_realizadas_aluno', kwargs={'pk': 2}),
+                                   HTTP_AUTHORIZATION=self.authorization)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def testa_agendas_nao_realizadas_aluno(self):
+        response = self.client.get(reverse('get_agendas_nao_realizadas_aluno', kwargs={'pk': 2}),
+                                   HTTP_AUTHORIZATION=self.authorization)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
