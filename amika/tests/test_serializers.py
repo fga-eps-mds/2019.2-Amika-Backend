@@ -146,9 +146,21 @@ class TestesAgendaSerializer(TestCase):
 
 class TestesHumor(TestCase):
     def testa_criacao_de_humor_do_dia(self):
+        Registro.objects.create(
+            matricula=123456789,
+            turma=Turma.objects.create(descricao="A"),
+            periodo=Periodo.objects.create(ano=2019, semestre=2))
+
+        aluno = Aluno.objects.create(
+            username='123123123',
+            first_name='Nome',
+            last_name='Sobrenome',
+            password='123',
+            registro=Registro.objects.first())
+
         humor_do_dia = {
             "humor_do_dia": "3",
-            "aluno": "2",
+            "aluno": aluno,
             "data": "2019-10-10"
         }
 
@@ -156,9 +168,21 @@ class TestesHumor(TestCase):
         self.assertTrue(isinstance(serializer, Humor))
 
     def testa_raises_validation_error(self):
+        Registro.objects.create(
+            matricula=123456789,
+            turma=Turma.objects.create(descricao="A"),
+            periodo=Periodo.objects.create(ano=2019, semestre=2))
+
+        aluno = Aluno.objects.create(
+            username='123123123',
+            first_name='Nome',
+            last_name='Sobrenome',
+            password='123',
+            registro=Registro.objects.first())
+
         humor_do_dia = {
             "humor_do_dia": "3",
-            "aluno": "2"
+            "aluno": aluno
         }
 
         serializer = HumorSerializer().create(humor_do_dia)

@@ -117,7 +117,7 @@ class AgendaRealizada(models.Model):
 
 class Humor(models.Model):
     humor_do_dia = models.IntegerField()
-    aluno = models.IntegerField()
+    aluno = models.ForeignKey(Aluno, on_delete=PROTECT)
     data = models.DateField(default=datetime.now)
 
     class Meta:

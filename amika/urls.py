@@ -40,13 +40,14 @@ urlpatterns = [
     path('materiais/', get, name="get_materiais"),
     path('material/<int:pk>', rud, name="rud_material"),
 
+    path('grafico/<int:pk>', humor_turma, name="humor_turma"),
     path('humor/', post, name="post_humor"),
     path('humors/', get, name="get_humors"),
-    path('alunos_grupo/', get_alunos_grupo, name="get_alunos_grupo"),
+
+  path('alunos_grupo/', get_alunos_grupo, name="get_alunos_grupo"),
 
     path('agenda-realizada/', post, name="post_agenda_realizada"),
     path('agenda-realizada/<int:pk>', rud, name="rud_agenda_realizada"),
     path('agendas-realizadas-aluno/<int:pk>', agendas_realizadas_aluno, name="get_agendas_realizadas_aluno"),
-    path('agendas-nao-realizadas-aluno/<int:pk>', agendas_nao_realizadas_aluno,
-         name="get_agendas_nao_realizadas_aluno"),
+    path('agendas-nao-realizadas-aluno/<int:pk>', agendas_nao_realizadas_aluno, name="get_agendas_nao_realizadas_aluno"),
 ]

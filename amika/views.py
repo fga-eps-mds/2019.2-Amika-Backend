@@ -5,6 +5,8 @@ from django.apps import apps
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.http import JsonResponse
+from datetime import datetime, date, timedelta
 
 from .serializers import *
 
@@ -88,6 +90,34 @@ def agendas_nao_realizadas_aluno(request, pk):
         id__in=AgendaRealizada.objects.filter(aluno_id=pk).values('agenda_id'))
     serializer = AgendaSerializer(agendas_nao_realizadas, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def humor_turma(request, pk):
+    turma = Turma.objects.filter(pk=pk)
+    registro = Registro.objects.filter(turma = turma[0])
+    aluno = Aluno.objects.filter(registro__in = registro)
+    humores = Humor.objects.filter(aluno__in = aluno).order_by('data')
+    # serializer = HumorSerializer(humores, many = True)
+    data_inicial = humores.first().data
+    data_final = humores.last().data
+    soma = 0
+    medias = []
+    numero_humores = 0
+    datas = []
+    while data_final >= data_inicial:
+        datas.append(data_inicial)
+        humores_dia = humores.filter(data = data_inicial)
+        for humor in humores_dia:
+            soma += humor.humor_do_dia
+            numero_humores += 1
+        medias.append(float("{0:.1f}".format(soma/numero_humores)))
+        soma = 0
+        numero_humores = 0
+        data_inicial += timedelta(days = 1)
+        
+
+    return Response({"medias": medias, "datas": datas})    
 
 
 @api_view(['GET', 'PUT', 'DELETE'])

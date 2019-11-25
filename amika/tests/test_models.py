@@ -61,12 +61,24 @@ class TestesAgenda(TestCase):
 
 class TestesHumor(TestCase):
     def testa_str_do_objeto(self):
+        aluno = Aluno.objects.create(
+            username="123123123",
+            first_name="Nome",
+            last_name="Sobrenome",
+            password="123",
+            registro=Registro.objects.create(
+                matricula=123456789,
+                turma=Turma.objects.create(descricao="A"),
+                periodo=Periodo.objects.create(ano=2019, semestre=2)
+                )
+            )
+
         humor_do_dia = Humor.objects.create(
             humor_do_dia=2,
-            aluno=3,
+            aluno=aluno,
             data="2019-10-10"
         )
-        self.assertEquals(str(humor_do_dia), "2 2019-10-10 3")
+        self.assertEquals(str(humor_do_dia), "2 2019-10-10 123123123 Nome Sobrenome")
 
 
 class TestesFormulario(TestCase):
