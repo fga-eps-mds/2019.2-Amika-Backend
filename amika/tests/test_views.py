@@ -68,13 +68,13 @@ class TestesPost(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def teste_cadastra_registo(self):
-        Turma.objects.create(descricao='A')
+        turma = Turma.objects.create(descricao='A')
 
         content = [{
             "matricula": "123456789",
             "turma": "A"
         }]
-        response = self.client.post(reverse('post_registro'), json.dumps(content), content_type='application/json',
+        response = self.client.post(reverse('post_registro'), json.dumps(content), content_type='application/json', 
                                     HTTP_AUTHORIZATION=self.authorization)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 

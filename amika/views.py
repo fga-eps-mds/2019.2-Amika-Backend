@@ -32,13 +32,14 @@ def serializer_status(serializer, success_status):
 
 @api_view(['POST'])
 def post(request):
-    request.data['aluno'] = request.user.id
-    print(request.user.id)
     if not request.data:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     param = request.path.split('/')[1].title()
     param = 'AgendaRealizada' if param == 'Agenda-Realizada' else param
+
+    if not isinstance(request.data, list):
+        request.data['aluno'] = int(request.user.id)
 
     if param == 'Registro':
         serializer = SERIALIZERS[param](data=request.data, many=True)
