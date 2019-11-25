@@ -7529,5 +7529,117 @@
       "groups": [],
       "user_permissions": []
     }
+  },
+  {
+    "model": "amika.agenda",
+    "pk": 1,
+    "fields": {
+      "nome": "Atividade 1",
+      "descricao": "Descrição 1",
+      "tipo": "individual",
+      "data_disponibilizacao": "2019-09-09",
+      "data_encerramento": "2019-09-10"
+    }
+  },
+  {
+    "model": "amika.agenda",
+    "pk": 2,
+    "fields": {
+      "nome": "Atividade 2",
+      "descricao": "Descrição 2",
+      "tipo": "individual",
+      "data_disponibilizacao": "2019-09-11",
+      "data_encerramento": "2019-09-12"
+    }
+  },
+  {
+    "model": "amika.agenda",
+    "pk": 3,
+    "fields": {
+      "nome": "Atividade 3",
+      "descricao": "Descrição 3",
+      "tipo": "individual",
+      "data_disponibilizacao": "2019-09-13",
+      "data_encerramento": "2019-09-14"
+    }
+  },
+  {
+    "model": "amika.agenda",
+    "pk": 4,
+    "fields": {
+      "nome": "Atividade 4",
+      "descricao": "Descrição 4",
+      "tipo": "individual",
+      "data_disponibilizacao": "2019-09-15",
+      "data_encerramento": "2019-09-16"
+    }
+  },
+  {
+    "model": "amika.agenda",
+    "pk": 5,
+    "fields": {
+      "nome": "Atividade 5",
+      "descricao": "Descrição 5",
+      "tipo": "individual",
+      "data_disponibilizacao": "2019-09-17",
+      "data_encerramento": "2019-09-18"
+    }
+  },
+  {
+    "model": "amika.agenda",
+    "pk": 6,
+    "fields": {
+      "nome": "Atividade 6",
+      "descricao": "Descrição 6",
+      "tipo": "individual",
+      "data_disponibilizacao": "2019-11-20",
+      "data_encerramento": "2019-11-25"
+    }
+  },
+  {
+    "model": "amika.agenda",
+    "pk": 7,
+    "fields": {
+      "nome": "Atividade 7",
+      "descricao": "Descrição 7",
+      "tipo": "individual",
+      "data_disponibilizacao": "2019-11-20",
+      "data_encerramento": "2019-11-25"
+    }
+  },
+  {
+    "model": "amika.agenda",
+    "pk": 8,
+    "fields": {
+      "nome": "Atividade 8",
+      "descricao": "Descrição 8",
+      "tipo": "Grupo",
+      "data_disponibilizacao": "2019-11-25",
+      "data_encerramento": "2019-11-30"
+    }
+  },
+  {
+    "model": "amika.agendaRealizada",
+    "pk": 1,
+    "fields": {
+      "data_criacao": "2019-09-09",
+      "data_ultima_alteracao": "2019-09-09",
+      "texto": "Texto Agenda Realizada.",
+      "anexo": "",
+      "agenda": 1,
+      "aluno": 2
+    }
+  },
+  {
+    "model": "amika.agendaRealizada",
+    "pk": 2,
+    "fields": {
+      "data_criacao": "2019-11-21",
+      "data_ultima_alteracao": "2019-11-21",
+      "texto": "Texto Agenda Realizada.",
+      "anexo": "",
+      "agenda": 6,
+      "aluno": 2
+    }
   }
 ]

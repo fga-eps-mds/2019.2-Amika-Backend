@@ -2,7 +2,8 @@ from django.test import TestCase
 
 from amika import serializers
 from amika.serializers import *
-
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.urls import reverse
 
 class TestesRegistroSerializer(TestCase):
     def setUp(self):
@@ -145,9 +146,21 @@ class TestesAgendaSerializer(TestCase):
 
 class TestesHumor(TestCase):
     def testa_criacao_de_humor_do_dia(self):
+        Registro.objects.create(
+            matricula=123456789,
+            turma=Turma.objects.create(descricao="A"),
+            periodo=Periodo.objects.create(ano=2019, semestre=2))
+
+        aluno = Aluno.objects.create(
+            username='123123123',
+            first_name='Nome',
+            last_name='Sobrenome',
+            password='123',
+            registro=Registro.objects.first())
+
         humor_do_dia = {
             "humor_do_dia": "3",
-            "aluno": "2",
+            "aluno": aluno,
             "data": "2019-10-10"
         }
 
@@ -155,11 +168,54 @@ class TestesHumor(TestCase):
         self.assertTrue(isinstance(serializer, Humor))
 
     def testa_raises_validation_error(self):
+        Registro.objects.create(
+            matricula=123456789,
+            turma=Turma.objects.create(descricao="A"),
+            periodo=Periodo.objects.create(ano=2019, semestre=2))
+
+        aluno = Aluno.objects.create(
+            username='123123123',
+            first_name='Nome',
+            last_name='Sobrenome',
+            password='123',
+            registro=Registro.objects.first())
+
         humor_do_dia = {
             "humor_do_dia": "3",
-            "aluno": "2"
+            "aluno": aluno
         }
 
         serializer = HumorSerializer().create(humor_do_dia)
         if Humor.objects.filter(data=serializer.data, aluno=serializer.aluno):
             with self.assertRaises(serializers.ValidationError): HumorSerializer().create(humor_do_dia)
+
+
+class TestesAgendaRealizadaSerializer(TestCase):
+    def testa_atualizacao_de_agenda_realizada(self):
+        agenda_realizada = AgendaRealizada.objects.create(
+            texto="Resposta atividade 2",
+            anexo=SimpleUploadedFile("file.mp4", b"file_content", content_type="video/mp4"),
+            agenda=Agenda.objects.create(
+                nome="Atividade 2",
+                descricao="descricao agenda...",
+                tipo="Individual",
+                data_disponibilizacao="2019-09-09",
+                data_encerramento="2019-09-10"),
+            aluno=Aluno.objects.create(
+                username="123456789",
+                first_name="Nome",
+                last_name="Sobrenome",
+                password="123",
+                registro=Registro.objects.create(
+                    matricula=123456789,
+                    turma=Turma.objects.create(descricao="A"),
+                    periodo=Periodo.objects.create(ano=2019, semestre=2))))
+
+        alteracoes = {
+            'texto': 'Agenda 2 realizada',
+            'anexo': '/media/abc.png',
+        }
+
+        serializer = AgendaRealizadaSerializer().update(agenda_realizada, alteracoes)
+        self.assertTrue(isinstance(serializer, AgendaRealizada))
+

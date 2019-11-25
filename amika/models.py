@@ -76,11 +76,15 @@ class Registro(models.Model):
         return "{} {} {}".format(self.periodo, self.turma, self.matricula)
 
 
+def aluno_foto_diretorio(instance, filename):
+    return '{}/foto_perfil/{}'.format(instance.aluno.username, filename)
+
+
 class Aluno(User):
     registro = models.OneToOneField(Registro, on_delete=CASCADE)
     grupo = models.ForeignKey(Grupo, on_delete=SET_NULL, null=True)
     formulario = models.ManyToManyField(Formulario, blank=True)
-    foto = models.FileField(upload_to='perfil/', null=True)
+    foto = models.ImageField(upload_to=aluno_foto_diretorio, null=True)
 
     class Meta:
         ordering = ['username']
@@ -89,9 +93,31 @@ class Aluno(User):
         return "{} {}".format(self.username, self.get_full_name())
 
 
+def aluno_agenda_realizada_diretorio(instance, filename):
+    return '{}/agenda_realizada/{}'.format(instance.aluno.username, filename)
+
+
+class AgendaRealizada(models.Model):
+    data_criacao = models.DateField(auto_now_add=True)
+    data_ultima_alteracao = models.DateField(auto_now_add=True)
+    texto = models.TextField()
+    anexo = models.FileField(upload_to=aluno_agenda_realizada_diretorio, null=True)
+    agenda = models.ForeignKey(Agenda, on_delete=CASCADE)
+    aluno = models.ForeignKey(Aluno, on_delete=CASCADE)
+
+    class Meta:
+        unique_together = ['agenda', 'aluno']
+        ordering = ['-agenda__data_encerramento', '-agenda__data_disponibilizacao', 'agenda__tipo', 'agenda__nome',
+                    '-data_ultima_alteracao', '-data_criacao',
+                    'aluno__username']
+
+    def __str__(self):
+        return "{} {} {}".format(self.aluno.username, self.agenda.nome, self.data_ultima_alteracao)
+
+
 class Humor(models.Model):
     humor_do_dia = models.IntegerField()
-    aluno = models.IntegerField()
+    aluno = models.ForeignKey(Aluno, on_delete=PROTECT)
     data = models.DateField(default=datetime.now)
 
     class Meta:
@@ -105,7 +131,7 @@ class Material(models.Model):
     arquivo = models.FileField(upload_to='materiais/')
 
     class Meta:
-        ordering = ['arquivo__nome']
+        ordering = ['arquivo']
 
     def __str__(self):
-        return self.arquivo.name
+        return self.arquivo

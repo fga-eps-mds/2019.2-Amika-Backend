@@ -1,6 +1,10 @@
+import tempfile
+
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 
 from amika.models import *
+from core import settings
 
 
 class TestesPeriodo(TestCase):
@@ -57,15 +61,50 @@ class TestesAgenda(TestCase):
 
 class TestesHumor(TestCase):
     def testa_str_do_objeto(self):
+        aluno = Aluno.objects.create(
+            username="123123123",
+            first_name="Nome",
+            last_name="Sobrenome",
+            password="123",
+            registro=Registro.objects.create(
+                matricula=123456789,
+                turma=Turma.objects.create(descricao="A"),
+                periodo=Periodo.objects.create(ano=2019, semestre=2)
+                )
+            )
+
         humor_do_dia = Humor.objects.create(
             humor_do_dia=2,
-            aluno=3,
+            aluno=aluno,
             data="2019-10-10"
         )
-        self.assertEquals(str(humor_do_dia), "2 2019-10-10 3")
+        self.assertEquals(str(humor_do_dia), "2 2019-10-10 123123123 Nome Sobrenome")
 
 
 class TestesFormulario(TestCase):
     def testa_str_do_objeto(self):
         formulario = Formulario.objects.create(tipo="A", pontuacao="10.00")
         self.assertEqual(str(formulario), "A 10.00")
+
+
+class TestesAgendaRealizada(TestCase):
+    def testa_str_do_objeto(self):
+        agenda_realizada = AgendaRealizada.objects.create(
+            texto="Resposta atividade 2",
+            anexo=SimpleUploadedFile("file.mp4", b"file_content", content_type="video/mp4"),
+            agenda=Agenda.objects.create(
+                nome="Atividade 2",
+                descricao="descricao agenda...",
+                tipo="Individual",
+                data_disponibilizacao="2019-09-09",
+                data_encerramento="2019-09-10"),
+            aluno=Aluno.objects.create(
+                username="123456789",
+                first_name="Nome",
+                last_name="Sobrenome",
+                password="123",
+                registro=Registro.objects.create(
+                    matricula=123456789,
+                    turma=Turma.objects.create(descricao="A"),
+                    periodo=Periodo.objects.create(ano=2019, semestre=2))))
+        self.assertEqual(str(agenda_realizada), "123456789 Atividade 2 {}".format(date.today()))

@@ -3,6 +3,14 @@ from rest_framework import serializers
 from .models import *
 
 
+def ano():
+    return date.today().year
+
+
+def semestre():
+    return 1 if date.today().month <= 6 else 2
+
+
 class TurmaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Turma
@@ -55,14 +63,12 @@ class AlunoSerializer(serializers.ModelSerializer):
         return nome
 
     def create(self, validated_data):
-        aluno = Aluno.objects.create(
+        aluno = Aluno.objects.create_user(
             username=validated_data['username'],
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
-            registro=Registro.objects.get(matricula=validated_data['username']),
-            foto=validated_data.get('foto'))
-        aluno.set_password(validated_data['password'])
-        aluno.save()
+            password=validated_data['password'],
+            registro=Registro.objects.get(matricula=validated_data['username']))
 
         return aluno
 
@@ -104,7 +110,7 @@ class AgendaSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if kwargs:
+        if kwargs and kwargs.get('data') and kwargs['data'].get('tipo'):
             kwargs['data']['tipo'] = kwargs['data']['tipo'].capitalize()
 
     def validate(self, data):
@@ -113,12 +119,22 @@ class AgendaSerializer(serializers.ModelSerializer):
         return data
 
 
-def ano():
-    return date.today().year
+class AgendaRealizadaSerializer(serializers.ModelSerializer):
+    agenda = serializers.PrimaryKeyRelatedField(read_only=False, queryset=Agenda.objects.all())
+    aluno = serializers.PrimaryKeyRelatedField(read_only=False, queryset=Aluno.objects.all())
 
+    class Meta:
+        model = AgendaRealizada
+        fields = '__all__'
 
-def semestre():
-    return 1 if date.today().month <= 6 else 2
+    def update(self, instance, validated_data):
+        if validated_data.get('texto'):
+            instance.texto = validated_data['texto']
+        if validated_data.get('anexo'):
+            instance.anexo = validated_data['anexo']
+
+        instance.save()
+        return instance
 
 
 class HumorSerializer(serializers.ModelSerializer):
@@ -130,12 +146,13 @@ class HumorSerializer(serializers.ModelSerializer):
 
         print(validated_data['aluno'])
         data = date.today()
-        if not Humor.objects.filter(data=data, aluno=validated_data['aluno']):
+        if not Humor.objects.filter(data = data,aluno = Aluno.objects.get(pk=validated_data['aluno'])):
             humor = Humor.objects.create(
-                humor_do_dia=validated_data['humor_do_dia'],
-                aluno=validated_data['aluno'],
-                data=date.today()
+                humor_do_dia = validated_data['humor_do_dia'],
+                aluno = Aluno.objects.get(pk=validated_data['aluno']),
+                data = date.today()
             )
+            humor.save()
             return humor
         else:
             raise serializers.ValidationError({"error": "Você já adicionou seu humor hoje!"})
