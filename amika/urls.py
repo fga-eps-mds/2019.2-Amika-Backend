@@ -43,8 +43,9 @@ urlpatterns = [
     path('grafico/<int:pk>', humor_turma, name="humor_turma"),
     path('humor/', post, name="post_humor"),
     path('humors/', get, name="get_humors"),
+    path('humor_status/', humor_status, name="get_humor_status"),
 
-  path('alunos_grupo/', get_alunos_grupo, name="get_alunos_grupo"),
+    path('alunos_grupo/', get_alunos_grupo, name="get_alunos_grupo"),
 
     path('agenda-realizada/', post, name="post_agenda_realizada"),
     path('agenda-realizada/<int:pk>', rud, name="rud_agenda_realizada"),

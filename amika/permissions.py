@@ -26,6 +26,7 @@ def usuario_eh_admin(request):
 
 
 def usuario_autenticado(request):
+    print(request.user.is_authenticated)
     return request.user and request.user.is_authenticated
 
 
@@ -47,9 +48,11 @@ def usuario_eh_dono_da_agenda_realizada(request):
 
 
 # Permissões
+
+
+
 def post_aluno(request):
     return True
-
 
 def get_aluno(request):
     return usuario_eh_o_aluno(request) or \
@@ -65,7 +68,6 @@ def get_grupo(request):
     return usuario_participa_do_grupo(request) or \
            usuario_eh_admin(request)
 
-
 def get_agendas(request):
     return usuario_autenticado(request)
 
@@ -73,20 +75,19 @@ def get_agendas(request):
 def get_agenda(request):
     return usuario_autenticado(request)
 
-
 def post_humor(request):
     return usuario_autenticado(request)
-
 
 def get_humors(request):
     return usuario_autenticado(request)
 
-
 def get_materiais(request):
     return usuario_autenticado(request)
 
-
 def get_material(request):
+    return usuario_autenticado(request)
+
+def get_humor_status(request):
     return usuario_autenticado(request)
 
 def get_alunos_grupo(request):
@@ -95,26 +96,21 @@ def get_alunos_grupo(request):
 def post_agenda_realizada(request):
     return usuario_autenticado(request)
 
-
 def get_agenda_realizada(request):
     return usuario_eh_dono_da_agenda_realizada(request) or \
            usuario_eh_admin(request)
-
 
 def get_agendas_realizadas_aluno(request):
     return usuario_eh_o_aluno(request) or \
            usuario_eh_admin(request)
 
-
 def get_agendas_nao_realizadas_aluno(request):
     return usuario_eh_o_aluno(request) or \
            usuario_eh_admin(request)
 
-
 def put_agenda_realizada(request):
     return usuario_eh_dono_da_agenda_realizada(request) or \
            usuario_eh_admin(request)
-
 
 def delete_agenda_realizada(request):
     return usuario_eh_dono_da_agenda_realizada(request) or \

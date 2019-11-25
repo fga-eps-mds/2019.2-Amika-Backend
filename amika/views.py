@@ -38,10 +38,14 @@ def post(request):
     param = request.path.split('/')[1].title()
     param = 'AgendaRealizada' if param == 'Agenda-Realizada' else param
 
+    if not isinstance(request.data, list):
+        request.data['aluno'] = int(request.user.id)
+
     if param == 'Registro':
         serializer = SERIALIZERS[param](data=request.data, many=True)
 
     else:
+        print(request.data)
         serializer = SERIALIZERS[param](data=request.data)
 
     return serializer_status(serializer, status.HTTP_201_CREATED)
@@ -61,6 +65,19 @@ def get(request):
     serializer = SERIALIZERS[param](objetos, many=True)
 
     return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def humor_status(request):
+    print(request.user.id)
+    humor = Humor.objects.filter(data = date.today(), aluno = request.user.id).first()
+    if humor:
+        adicionado = True
+        humor_do_dia = humor.humor_do_dia
+    else:
+        adicionado = False
+        humor_do_dia = 0
+
+    return Response({"adicionado": adicionado, "humor": humor_do_dia}, status = status.HTTP_200_OK)
 
 @api_view(['GET'])
 def get_alunos_grupo(request):
