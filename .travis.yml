@@ -3,18 +3,36 @@ sudo: required
 services:
   - docker
 
+env:
+  - DOCKER_COMPOSE_VERSION=1.24.1
+
 before_install:
+  # Update Docker Compose
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+
+  # Update Docker
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+
   - sudo /etc/init.d/postgresql stop
 
-before_script:
-  - docker-compose -f "docker-compose.yml" up -d --build
-  - >
-    while ! docker logs backend | grep "Starting development server at http://0.0.0.0:8000/"; do
-        sleep 5
-    done;
+  - echo -e "\nENV COVERALLS_REPO_TOKEN ${COVERALLS_REPO_TOKEN}" >> Dockerfile
 
 script:
-  - docker exec -it backend python3 manage.py test
+  - docker-compose up -d --build
+  - >
+    while ! docker logs backend | grep "Starting development server at http://0:8000/"; do
+      sleep 5
+    done;
+  - docker exec -it backend bash -c '
+      python3 manage.py migrate &&
+      coverage run --source='.' manage.py test &&
+      coveralls'
 
 after_script:
-  - docker-compose -f "docker-compose.yml" down --remove-orphans
+  - docker-compose down --remove-orphans
