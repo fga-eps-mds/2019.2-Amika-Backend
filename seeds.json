@@ -7641,5 +7641,101 @@
       "agenda": 6,
       "aluno": 2
     }
+  },
+
+  {
+    "model": "amika.humor",
+    "pk": 1,
+    "fields": {
+      "humor_do_dia": "5",
+      "aluno": 1,
+      "data": "2019-11-21"
+    }
+  },
+
+  {
+    "model": "amika.humor",
+    "pk": 2,
+    "fields": {
+      "humor_do_dia": "3",
+      "aluno": 1,
+      "data": "2019-11-22"
+    }
+  },
+
+  {
+    "model": "amika.humor",
+    "pk": 3,
+    "fields": {
+      "humor_do_dia": "1",
+      "aluno": 1,
+      "data": "2019-11-23"
+    }
+  },
+
+  {
+    "model": "amika.humor",
+    "pk": 4,
+    "fields": {
+      "humor_do_dia": "2",
+      "aluno": 1,
+      "data": "2019-11-24"
+    }
+  },
+
+  {
+    "model": "amika.humor",
+    "pk": 5,
+    "fields": {
+      "humor_do_dia": "4",
+      "aluno": 1,
+      "data": "2019-11-25"
+    }
+  },
+  {
+    "model": "amika.humor",
+    "pk": 6,
+    "fields": {
+      "humor_do_dia": "2",
+      "aluno": 1,
+      "data": "2019-11-26"
+    }
+  },
+  {
+    "model": "amika.humor",
+    "pk": 7,
+    "fields": {
+      "humor_do_dia": "3",
+      "aluno": 1,
+      "data": "2019-11-27"
+    }
+  },
+  {
+    "model": "amika.humor",
+    "pk": 8,
+    "fields": {
+      "humor_do_dia": "4",
+      "aluno": 1,
+      "data": "2019-11-28"
+    }
+  },
+  {
+    "model": "amika.humor",
+    "pk": 9,
+    "fields": {
+      "humor_do_dia": "4",
+      "aluno": 1,
+      "data": "2019-11-29"
+    }
+  },
+  {
+    "model": "amika.humor",
+    "pk": 10,
+    "fields": {
+      "humor_do_dia": "5",
+      "aluno": 1,
+      "data": "2019-11-30"
+    }
   }
+
 ]
