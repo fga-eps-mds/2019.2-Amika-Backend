@@ -38,8 +38,11 @@ def post(request):
     param = request.path.split('/')[1].title()
     param = 'AgendaRealizada' if param == 'Agenda-Realizada' else param
 
-    if not isinstance(request.data, list):
-        request.data['aluno'] = int(request.user.id)
+    try:
+        if not isinstance(request.data, list) or request.data['aluno']:
+            request.data['aluno'] = int(request.user.id)
+    except Exception as e:
+        pass
 
     if param == 'Registro':
         serializer = SERIALIZERS[param](data=request.data, many=True)
